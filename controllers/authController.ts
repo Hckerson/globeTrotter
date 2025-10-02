@@ -1,11 +1,13 @@
 import { User } from "../models/model";
 import { Request, Response } from "express";
+import { RequestWithUser } from "../types/req";
+
 
 class AuthController {
   constructor() {}
-  async login(req: Request, res: Response) {}
+  async login(req: RequestWithUser, res: Response) {}
 
-  async register(req: Request, res: Response) {
+  async register(req: RequestWithUser, res: Response) {
     const { fullName, email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
