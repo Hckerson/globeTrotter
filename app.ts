@@ -33,7 +33,7 @@ app.use('/v1', (req, res, next)=>{
     next()
   }
   // apply global middleware  
-  
+  next()
 })
 
 // mount routes

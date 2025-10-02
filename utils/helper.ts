@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import * as jwt from 'jsonwebtoken'
 
-cons
+const frontendUrl = process.env.FRONTEND_URL
+const jwtsecret = process.env.JWT_SECRET || ""
 
 const getTokenFromHeader = async (
   req: Request,
@@ -15,14 +17,17 @@ const getTokenFromHeader = async (
 
 
 const AuthMiddleware  = async (req: Request, res: Response, next: NextFunction) => {
+  
   const token = await getTokenFromHeader(req)
 
   if(!token){
-    res.status(401).json({
+    return res.status(401).json({
       message:"Access denied!, no token provide",
-      redirect:``
+      redirect:`${frontendUrl}/${encodeURIComponent(req.originalUrl)}`
     })
   }
+  const decodedPayload = jwt.verify(token,jwtsecret )
 
+  
 }
 

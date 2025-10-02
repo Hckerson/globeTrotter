@@ -1,9 +1,11 @@
-
+import { Request, Response } from "express";
 
 class UserController {
   constructor() {}
-  async getProfile() {
-
+  async getProfile(req: Request, res: Response) {
+    return res.status(200).json({
+      name: "hckerson",
+    });
   }
 }
 
