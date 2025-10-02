@@ -6,7 +6,7 @@ class UserRoutes {
 
   constructor() {
     this.router = express.Router();
-    this.initializeRoutes();
+    this.initializeRoutes(); 
   }
 
   initializeRoutes() {
@@ -21,4 +21,4 @@ class UserRoutes {
   }
 }
 
-export default new UserRoutes().getRouter()
+export default new UserRoutes().getRouter();

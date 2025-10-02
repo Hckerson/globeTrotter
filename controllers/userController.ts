@@ -1,3 +1,4 @@
+import { User } from "../models/model";
 import { Request, Response } from "express";
 
 class UserController {
@@ -7,6 +8,8 @@ class UserController {
       name: "hckerson",
     });
   }
+
+
 }
 
 export default new UserController();
