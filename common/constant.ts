@@ -1,0 +1,3 @@
+const CODE_EXPIRATION = 15 * 60 * 1000;
+
+export { CODE_EXPIRATION };

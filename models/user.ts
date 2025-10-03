@@ -9,7 +9,7 @@ const SALT_HASH = 10;
 
 const userSchema = new Schema({
   _id: { type: "UUID", default: () => randomUUID() },
-  fullName: { type: String, required: true },
+  username: { type: String, required: true },
   createdAt: { type: Date, default: Date.now() },
   email: { type: String, required: true, unique: true, index: true },
   emailVerified: {
