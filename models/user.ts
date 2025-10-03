@@ -4,7 +4,6 @@ import { reviewSchema } from "./review";
 import mongoose from "../database/connection";
 
 const { Schema } = mongoose;
-const {} = process.env;
 
 const SALT_HASH = 10;
 

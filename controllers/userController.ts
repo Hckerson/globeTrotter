@@ -1,4 +1,3 @@
-import { User } from "../models/user";
 import { Request, Response } from "express";
 import { RequestWithUser } from "../types/req";
 
