@@ -1,29 +1,12 @@
 import bcrypt from "bcryptjs";
-const { Schema } = mongoose;
 import { randomUUID } from "crypto";
-import * as mongoose from "mongoose";
-const { JWT_SECRET, MONGO_USERNAME, MONGO_PASSWORD } = process.env;
+import { reviewSchema } from "./review";
+import mongoose from "../database/connection";
 
-const MONGO_CONNECTION_STRING = `mongodb+srv://${MONGO_USERNAME}:${encodeURIComponent(
-  MONGO_PASSWORD ?? ""
-)}@globetrotter.0yyk4lm.mongodb.net/globe?retryWrites=true&w=majority&appName=globeTrotter`;
+const { Schema } = mongoose;
+const {} = process.env;
+
 const SALT_HASH = 10;
-
-async function connectMongoose() {
-  await mongoose
-    .connect(MONGO_CONNECTION_STRING)
-    .then(() => console.log("Mongo connection succesfully established"))
-    .catch((err) => console.log("Mongo connection error", err));
-}
-
-connectMongoose();
-
-const reviewSchema = new Schema({
-  _id: { type: "UUID", default: () => randomUUID() },
-  userId: { type: "UUID", ref: "User" },
-});
-
-const Review = mongoose.model("Review", reviewSchema);
 
 const userSchema = new Schema({
   _id: { type: "UUID", default: () => randomUUID() },
@@ -58,4 +41,4 @@ userSchema.pre("findOneAndUpdate", async function (next) {
 
 const User = mongoose.model("User", userSchema);
 
-export { User, Review };
+export { User, userSchema };
