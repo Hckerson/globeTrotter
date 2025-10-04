@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
-import mongoose from "../database/connection";
+import mongoose from "../providers/database/connection";
 const { Schema } = mongoose;
-const { } = process.env;
+const {} = process.env;
 
-const SALT_HASH = 10
+const SALT_HASH = 10;
 
 const reviewSchema = new Schema({
   _id: { type: "UUID", default: () => randomUUID() },
@@ -12,6 +12,5 @@ const reviewSchema = new Schema({
 });
 
 const Review = mongoose.model("Review", reviewSchema);
-
 
 export { Review, reviewSchema };

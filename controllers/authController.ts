@@ -86,6 +86,8 @@ class AuthController {
         expiresAt
       });
 
+      
+
       return res.status(201).json({
         message: "Sign up successfull",
       });

@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import mongoose from "../database/connection";
+import mongoose from "../providers/database/connection";
 
 const { Schema, model } = mongoose;
 

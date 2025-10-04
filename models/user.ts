@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import { reviewSchema } from "./review";
-import mongoose from "../database/connection";
+import mongoose from "../providers/database/connection";
 
 const { Schema } = mongoose;
 
