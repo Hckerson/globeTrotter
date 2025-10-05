@@ -81,18 +81,20 @@ class AuthController {
       const token = randomBytes(32).toString("hex");
       const expiresAt = new Date(Date.now() + CODE_EXPIRATION);
 
-      new VerificationCode({
+      const code = new VerificationCode({
         userId,
         code: token,
         expiresAt,
       });
+
+      await code.save();
 
       const response = await emailController.sendLoginEmail(email, token);
 
       if (response.success) {
         return res.status(201).json({
           message: "Sign up successfull",
-          description: "Verification email has been sent to your imbox"
+          description: "Verification email has been sent to your imbox",
         });
       }
     } catch (error) {

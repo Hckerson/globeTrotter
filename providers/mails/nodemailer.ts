@@ -1,7 +1,8 @@
-import { resend } from "./connection";
-import { EmailTemplates } from "../../lib/templates/email";
+import "dotenv/config";
+import * as nodemailer from "nodemailer";
+import { SendMailOptions } from "nodemailer";
 
-const { resetPassword, verifyEmail, loginAlert, welcomeEmail } = EmailTemplates;
+import { EmailTemplates } from "../../lib/templates/email";
 
 export type EmailType =
   | "verify-email"
@@ -17,17 +18,28 @@ interface EmailProps {
   type: EmailType;
 }
 
+const { verifyEmail, resetPassword, loginAlert, welcomeEmail } = EmailTemplates;
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.APP_USERNAME || "",
+    pass: process.env.APP_PASSWORD || "",
+  },
+});
+
 export async function sendEmail(props: EmailProps) {
   const result = selectTemplate(props);
   try {
-    const response = (await resend).emails.send({ ...props, ...result });
-    const { data, error } = await response;
-    if (error) {
-      return { success: false };
-    }
-    return { success: true };
+    const info = await transporter.sendMail({
+      ...props,
+      ...result,
+    });
+    console.log("Message sent: %s", info.messageId);
+    if (!info) return { success: false, message: "Email not sent" };
+    return { success: true, message: "Email sent" };
   } catch (error) {
-    console.error("Error sending email", error);
+    console.error(`Error sending email: ${error}`);
     throw error;
   }
 }
