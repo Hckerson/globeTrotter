@@ -4,14 +4,9 @@ import mongoose from "../providers/database/connection";
 const { Schema, model } = mongoose;
 
 const verificationCodeSchema = new Schema({
-  _id: {
-    type: "UUID",
-    default: () => randomUUID(),
-  },
   userId: {
     type: String,
     required: true,
-    unique: true,
     ref: "User",
   },
   code: {

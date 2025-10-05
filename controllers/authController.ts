@@ -1,15 +1,12 @@
 import * as bcrypt from "bcryptjs";
-import {  Response } from "express";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { User } from "../models/user";
 import { randomBytes } from "node:crypto";
+import { Response, Request } from "express";
 import { RequestWithUser } from "../types/req";
 import emailController from "./emailController";
 import { VerificationCode } from "../models/verificationCodes";
-import {
-  CODE_EXPIRATION,
-  JWT_LIFETIME,
-} from "../common/constant";
+import { CODE_EXPIRATION, JWT_LIFETIME } from "../common/constant";
 
 const { JWT_SECRET } = process.env;
 
@@ -17,20 +14,21 @@ class AuthController {
   constructor() {}
   async login(req: RequestWithUser, res: Response) {
     const { email, username, password } = req.body;
-
-    if (!password) {
+    
+    if (!email && !username) {
       return res.status(400).json({
-        message: "Password is required",
+        message: "Username or email is required to login",
       });
     }
 
     try {
       let user = null;
       // check for email first
-      user = await User.findOne({ email });
-
+      if (email) {
+        user = await User.findOne({ email: email.toLowerCase() }).exec();
+      }
       if (!user || user == null) {
-        user = await User.findOne({ email });
+        user = await User.findOne({ username: username.toLowerCase() }).exec();
       }
 
       if (!user) {
@@ -116,7 +114,7 @@ class AuthController {
   }
 
   async register(req: RequestWithUser, res: Response) {
-    const { username, email, password, confirmPassword } = req.body;
+    const { username, email, password, confirmPassword, role } = req.body;
 
     if (password !== confirmPassword) {
       return res.status(400).json({
@@ -136,6 +134,7 @@ class AuthController {
         username: username.toLowerCase(),
         email: normalizedEmail,
         password,
+        role,
       });
 
       await newUser.save();
@@ -157,6 +156,7 @@ class AuthController {
 
       if (response.success) {
         return res.status(201).json({
+          success: true,
           message: "Sign up successfull",
           description: "Verification email has been sent to your imbox",
         });
@@ -168,6 +168,58 @@ class AuthController {
         });
       }
       console.log("Error registering user", error);
+    }
+  }
+
+  async verifyEmail(req: Request, res: Response) {
+    const { email, token } = req.query;
+    const now = new Date(Date.now());
+
+    try {
+      if (!email || !token) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid request",
+          description: "email or token is missing",
+        });
+      }
+
+      const storedToken = await VerificationCode.findOne({ code: token });
+
+      if (!storedToken) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid token",
+        });
+      }
+
+      if (storedToken.expiresAt < now) {
+        return res.status(400).json({
+          success: false,
+          error: "Token has expired",
+        });
+      }
+
+      const isValidToken = token == storedToken.code;
+
+      if (!isValidToken) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid token",
+        });
+      }
+
+      User.updateOne({ email }, { emailVerified: true }).exec();
+
+      return res.status(200).json({
+        success: true,
+        message: "Email verified successfully",
+      });
+    } catch (error) {
+      console.error("Error verifying user email", error);
+      return res.status(500).json({
+        error: "Internal Server error",
+      });
     }
   }
 }

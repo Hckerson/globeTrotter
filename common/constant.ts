@@ -1,5 +1,5 @@
 const APP_NAME = "GlobeTrotter";
-const JWT_LIFETIME = "30d"
+const JWT_LIFETIME = "1d"
 const CODE_EXPIRATION = 15 * 60 * 1000;
 const FRONTEND_URL = "http://localhost:4000";
 

@@ -2,8 +2,8 @@ import * as jwt from "jsonwebtoken";
 import { User } from "../../models/user";
 import { RequestWithUser } from "../../types/req";
 import { Request, Response, NextFunction } from "express";
+import { FRONTEND_URL } from "../constant";
 
-const frontendUrl = process.env.FRONTEND_URL;
 const jwtsecret = process.env.JWT_SECRET || "";
 
 const getTokenFromHeader = async (req: Request) => {
@@ -21,17 +21,17 @@ const authMiddleware = async (
   next: NextFunction,
 ) => {
   const token = await getTokenFromHeader(req);
-
+  console.log(req.user)
   if (!token) {
     return res.status(401).json({
-      message: "Access denied!, no token provide",
-      redirect: `${frontendUrl}/${encodeURIComponent(req.originalUrl)}`,
+      message: "Access denied!, no token provided",
+      redirect: `${FRONTEND_URL}/${encodeURIComponent(req.originalUrl)}`,
     });
   }
 
   try {
     const decodedPayload = jwt.verify(token, jwtsecret) as jwt.JwtPayload;
-
+    console.log(decodedPayload)
     const userId = decodedPayload.userId;
 
     const user = User.findOne({ id: userId });

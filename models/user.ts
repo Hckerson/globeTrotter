@@ -8,8 +8,7 @@ const { Schema } = mongoose;
 const SALT_HASH = 10;
 
 const userSchema = new Schema({
-  _id: { type: "UUID", default: () => randomUUID() },
-  username: { type: String, required: true },
+  username: { type: String, required: true, lowercase: true },
   createdAt: { type: Date, default: Date.now() },
   email: {
     type: String,
@@ -34,6 +33,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, SALT_HASH);
   next();
 });
+
 
 userSchema.pre("findOneAndUpdate", async function (next) {
   console.log("update", this.getUpdate());

@@ -6,7 +6,6 @@ const {} = process.env;
 
 
 const reviewSchema = new Schema({
-  _id: { type: "UUID", default: () => randomUUID() },
   userId: { type: "UUID", ref: "User" },
 });
 
