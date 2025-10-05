@@ -1,4 +1,4 @@
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { User } from "../../models/user";
 import { RequestWithUser } from "../../types/req";
 import { Request, Response, NextFunction } from "express";
@@ -18,23 +18,21 @@ const getTokenFromHeader = async (req: Request) => {
 const authMiddleware = async (
   req: RequestWithUser,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const token = await getTokenFromHeader(req);
-  console.log(req.user)
+  console.log("User", req.user);
   if (!token) {
     return res.status(401).json({
       message: "Access denied!, no token provided",
       redirect: `${FRONTEND_URL}/${encodeURIComponent(req.originalUrl)}`,
     });
   }
-
   try {
     const decodedPayload = jwt.verify(token, jwtsecret) as jwt.JwtPayload;
-    console.log(decodedPayload)
     const userId = decodedPayload.userId;
 
-    const user = User.findOne({ id: userId });
+    const user = await User.findOne({ _id: userId });
 
     if (!user) {
       return res.status(401).json({
@@ -42,23 +40,22 @@ const authMiddleware = async (
       });
     }
 
-    req.user!.id = userId;
+    req.user = { id: user._id, role: user.role as string };
     next();
   } catch (error) {
     console.error("Error running auth middleware", error);
 
-    if(error instanceof jwt.TokenExpiredError){
+    if (error instanceof jwt.TokenExpiredError) {
       return res.status(401).json({
-        error:"Invalid token",
-        description:"Token is expired"
-      })
+        error: "Invalid token",
+        description: "Token is expired",
+      });
     }
 
     return res.status(500).json({
-      error: "Internal Server error"
-    })
+      error: "Internal Server error",
+    });
   }
 };
 
-
-export {authMiddleware}
+export { authMiddleware };

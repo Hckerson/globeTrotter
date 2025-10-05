@@ -14,7 +14,7 @@ class AuthController {
   constructor() {}
   async login(req: RequestWithUser, res: Response) {
     const { email, username, password } = req.body;
-    
+
     if (!email && !username) {
       return res.status(400).json({
         message: "Username or email is required to login",
@@ -25,10 +25,10 @@ class AuthController {
       let user = null;
       // check for email first
       if (email) {
-        user = await User.findOne({ email: email.toLowerCase() }).exec();
+        user = await User.findOne({ email: email.toLowerCase() });
       }
       if (!user || user == null) {
-        user = await User.findOne({ username: username.toLowerCase() }).exec();
+        user = await User.findOne({ username: username.toLowerCase() });
       }
 
       if (!user) {
@@ -83,7 +83,7 @@ class AuthController {
 
       const token = await jwt.sign(
         {
-          userId: user.id,
+          userId: user._id,
           role: user.role,
         },
         JWT_SECRET ?? "",
@@ -95,11 +95,10 @@ class AuthController {
         secure: process.env.NODE_ENV == "production",
       });
 
-      req.user = { id: user._id, role: user.role as string };
-
       return res.status(200).json({
         success: true,
         message: "Login successful",
+        token: token,
       });
     } catch (error) {
       if (error instanceof Error) {
