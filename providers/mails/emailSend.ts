@@ -3,7 +3,7 @@ import { EmailTemplates } from "../../lib/templates/email";
 
 const { resetPassword, verifyEmail, loginAlert, welcomeEmail } = EmailTemplates;
 
-type EmailType =
+export type EmailType =
   | "verify-email"
   | "reset-password"
   | "welcome-email"

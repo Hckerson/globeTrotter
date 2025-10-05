@@ -3,8 +3,9 @@ import { User } from "../models/user";
 import { randomBytes } from "node:crypto";
 import { Request, Response } from "express";
 import { RequestWithUser } from "../types/req";
-import { CODE_EXPIRATION } from "../common/constant";
+import emailController from "./emailController";
 import { VerificationCode } from "../models/verificationCodes";
+import { CODE_EXPIRATION, FRONTEND_URL } from "../common/constant";
 
 class AuthController {
   constructor() {}
@@ -83,15 +84,17 @@ class AuthController {
       new VerificationCode({
         userId,
         code: token,
-        expiresAt
+        expiresAt,
       });
 
+      const response = await emailController.sendLoginEmail(email, token);
 
-      
-
-      return res.status(201).json({
-        message: "Sign up successfull",
-      });
+      if (response.success) {
+        return res.status(201).json({
+          message: "Sign up successfull",
+          description: "Verification email has been sent to your imbox"
+        });
+      }
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).json({
