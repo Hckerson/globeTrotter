@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../controllers/userController";
+import { authMiddleware } from "../common/middleware/authMiddleware";
 
 class UserRoutes {
   private router;
@@ -12,6 +13,7 @@ class UserRoutes {
   initializeRoutes() {
     this.router.get(
       "/users/profile",
+      authMiddleware,
       userController.getProfile.bind(userController)
     );
   }

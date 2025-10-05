@@ -1,11 +1,17 @@
 import * as bcrypt from "bcryptjs";
+import {  Response } from "express";
+import * as jwt from "jsonwebtoken";
 import { User } from "../models/user";
 import { randomBytes } from "node:crypto";
-import { Request, Response } from "express";
 import { RequestWithUser } from "../types/req";
 import emailController from "./emailController";
 import { VerificationCode } from "../models/verificationCodes";
-import { CODE_EXPIRATION, FRONTEND_URL } from "../common/constant";
+import {
+  CODE_EXPIRATION,
+  JWT_LIFETIME,
+} from "../common/constant";
+
+const { JWT_SECRET } = process.env;
 
 class AuthController {
   constructor() {}
@@ -19,7 +25,13 @@ class AuthController {
     }
 
     try {
-      const user = await User.findOne({ email });
+      let user = null;
+      // check for email first
+      user = await User.findOne({ email });
+
+      if (!user || user == null) {
+        user = await User.findOne({ email });
+      }
 
       if (!user) {
         return res.status(401).json({
@@ -39,6 +51,58 @@ class AuthController {
           message: "Invalid username or password",
         });
       }
+
+      if (!user.emailVerified) {
+        try {
+          // send verification email
+          const token = randomBytes(32).toString("hex");
+          const expiresAt = new Date(Date.now() + CODE_EXPIRATION);
+
+          const code = new VerificationCode({
+            userId: user._id,
+            code: token,
+            expiresAt,
+          });
+
+          await code.save();
+
+          const response = await emailController.sendLoginEmail(email, token);
+
+          if (response.success) {
+            return res.status(401).json({
+              error: "Email not verified",
+              message:
+                "Please verify your email before logging in, A new verification email has been sent to your imbox",
+            });
+          }
+        } catch (error) {
+          console.error("Error sending verification email", error);
+          return res.status(500).json({
+            error: "Server error",
+          });
+        }
+      }
+
+      const token = await jwt.sign(
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        JWT_SECRET ?? "",
+        { expiresIn: JWT_LIFETIME }
+      );
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV == "production",
+      });
+
+      req.user = { id: user._id, role: user.role as string };
+
+      return res.status(200).json({
+        success: true,
+        message: "Login successful",
+      });
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).json({

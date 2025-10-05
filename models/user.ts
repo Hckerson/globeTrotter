@@ -11,11 +11,18 @@ const userSchema = new Schema({
   _id: { type: "UUID", default: () => randomUUID() },
   username: { type: String, required: true },
   createdAt: { type: Date, default: Date.now() },
-  email: { type: String, required: true, unique: true, index: true },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+    lowercase: true,
+  },
   emailVerified: {
     type: Boolean,
     default: false,
   },
+  role: { type: String, enum: ["admin", "user"] },
   password: { type: String, required: true },
   reviews: [reviewSchema],
 });

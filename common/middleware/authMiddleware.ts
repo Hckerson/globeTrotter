@@ -15,10 +15,10 @@ const getTokenFromHeader = async (req: Request) => {
   return null;
 };
 
-const AuthMiddleware = async (
+const authMiddleware = async (
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
-  req: RequestWithUser
 ) => {
   const token = await getTokenFromHeader(req);
 
@@ -46,6 +46,19 @@ const AuthMiddleware = async (
     next();
   } catch (error) {
     console.error("Error running auth middleware", error);
-    throw error;
+
+    if(error instanceof jwt.TokenExpiredError){
+      return res.status(401).json({
+        error:"Invalid token",
+        description:"Token is expired"
+      })
+    }
+
+    return res.status(500).json({
+      error: "Internal Server error"
+    })
   }
 };
+
+
+export {authMiddleware}
