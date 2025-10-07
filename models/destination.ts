@@ -11,6 +11,7 @@ const destinationSchema = new Schema({
     state: String,
   },
   type: {
+    type: String,
     enum: ["city", "country", "natural"],
   },
   description: String,

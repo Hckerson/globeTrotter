@@ -11,7 +11,7 @@ class AuthRoutes {
   }
 
   initializeRoutes() {
-    this.router.post("/auth/login", authController.logrin.bind(authController));
+    this.router.post("/auth/login", authController.login.bind(authController));
     this.router.post("/auth/signup", authController.register.bind(authController));
     this.router.get('/auth/verify-email', authController.verifyEmail.bind(authController))
   }
