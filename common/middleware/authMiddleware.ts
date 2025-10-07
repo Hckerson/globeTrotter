@@ -21,7 +21,6 @@ const authMiddleware = async (
   next: NextFunction
 ) => {
   const token = await getTokenFromHeader(req);
-  console.log("User", req.user);
   if (!token) {
     return res.status(401).json({
       message: "Access denied!, no token provided",
@@ -33,7 +32,6 @@ const authMiddleware = async (
     const userId = decodedPayload.userId;
 
     const user = await User.findOne({ _id: userId });
-
     if (!user) {
       return res.status(401).json({
         error: "Invalid token",

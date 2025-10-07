@@ -6,6 +6,7 @@ import express from "express";
 
 import userRoute from "./routes/user";
 import authRoute from "./routes/auth";
+import iteneraryRoute from "./routes/itenerary";
 
 const app = express();
 
@@ -27,7 +28,7 @@ const publicRoutes = ["/login", "/signup", "/verify-password", "/verify-email"];
 
 app.use("/v1", (req, res, next) => {
   if (publicRoutes.some((route) => req.path.startsWith(route))) {
-    next();
+    return next();
   }
   // apply global middleware
   next();
@@ -36,6 +37,7 @@ app.use("/v1", (req, res, next) => {
 // mount routes
 app.use("/v1", userRoute);
 app.use("/v1", authRoute);
+app.use("/v1", iteneraryRoute);
 
 const port = process.env.PORT || 4000;
 
