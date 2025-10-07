@@ -1,14 +1,24 @@
 import mongoose from "../providers/database/connection";
 
-const {Schema, model} = mongoose
+const { Schema, model } = mongoose;
 
 const destinationSchema = new Schema({
-  name: {type: String},
-  location:{
+  name: { type: String },
+  location: {
     address: String,
-    coordinates: String
+    coordinates: String,
+    country: String,
+    state: String,
   },
-  type:{
-    enum:['city', 'country', 'natural']
-  }
-})
+  type: {
+    enum: ["city", "country", "natural"],
+  },
+  description: String,
+  images: [String],
+  avgCost: { type: Number },
+  createdAt: { type: Date, default: Date.now() },
+});
+
+const Destination = model("Destination", destinationSchema);
+
+export { Destination, destinationSchema };

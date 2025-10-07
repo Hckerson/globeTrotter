@@ -1,10 +1,11 @@
+import { Types } from "mongoose";
 import mongoose from "../providers/database/connection";
 
 const { Schema, model } = mongoose;
 
 const verificationCodeSchema = new Schema({
   userId: {
-    type: String,
+    type: Types.ObjectId,
     required: true,
     ref: "User",
   },
