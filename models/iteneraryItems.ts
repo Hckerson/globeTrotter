@@ -3,7 +3,7 @@ import mongoose from "../providers/database/connection";
 const { Schema, model, Types } = mongoose;
 
 const iteneraryItemSchema = new Schema({
-  iteneraryId: { type: Types.ObjectId, required: true, ref: "Itenerary" },
+  iteneraryId: { type: Types.ObjectId,ref: "Itenerary" },
   dayNumber: { type: Number, required: true },
   experienceId: { type: Types.ObjectId, required: true, ref: "Experience" },
   notes: String,

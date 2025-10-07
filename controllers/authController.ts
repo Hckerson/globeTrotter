@@ -14,6 +14,7 @@ class AuthController {
   constructor() {}
   async login(req: RequestWithUser, res: Response) {
     const { email, username, password } = req.body;
+    console.log('Logging user in with credentiala', req.body)
 
     if (!email && !username) {
       return res.status(400).json({
@@ -22,6 +23,7 @@ class AuthController {
     }
 
     try {
+      console.log('looking up user with either username or email')
       let user = null;
       // check for email first
       if (email) {
@@ -39,6 +41,7 @@ class AuthController {
         });
       }
 
+      console.log('comparing password')
       const storedHash = user.password;
       const isValid = await bcrypt.compare(password, storedHash);
 
@@ -51,6 +54,7 @@ class AuthController {
       }
 
       if (!user.emailVerified) {
+        console.log('Email not verified, sending verification link to email')
         try {
           // send verification email
           const token = randomBytes(32).toString("hex");
@@ -81,6 +85,7 @@ class AuthController {
         }
       }
 
+      console.log('signing token to store')
       const token = await jwt.sign(
         {
           userId: user._id,
@@ -115,6 +120,7 @@ class AuthController {
   async register(req: RequestWithUser, res: Response) {
     const { username, email, password, confirmPassword, role } = req.body;
 
+    console.log('Registering user with data', req.body)
     if (password !== confirmPassword) {
       return res.status(400).json({
         message: "Password must match",
@@ -126,6 +132,7 @@ class AuthController {
     try {
       const existingUser = await User.findOne({ email: normalizedEmail });
 
+      console.log('Found existing user')
       if (existingUser)
         return res.status(409).json({ message: "Email already exists" });
 
@@ -137,7 +144,7 @@ class AuthController {
       });
 
       await newUser.save();
-
+      console.log('Saved  user successfully')
       const userId = newUser._id;
       // send verification email
       const token = randomBytes(32).toString("hex");
@@ -152,7 +159,7 @@ class AuthController {
       await code.save();
 
       const response = await emailController.sendLoginEmail(email, token);
-
+      console.log('Sent verificaion email to user')
       if (response.success) {
         return res.status(201).json({
           success: true,

@@ -11,9 +11,12 @@ const itenerarySchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   sharedWith: [Types.ObjectId],
-  item: [iteneraryItemSchema],
   createdAt: { type: Date, default: Date.now() },
 });
+
+itenerarySchema.pre('save', function(){
+
+})
 
 const Itenerary = model("Itenerary", itenerarySchema);
 
