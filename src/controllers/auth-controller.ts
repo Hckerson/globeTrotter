@@ -1,8 +1,11 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 
 class AuthController {
-  async login() {}
-  
+  async login(req: Request, res: Response) {
+
+    return res.json({ message: "Login successful" });
+  }
+
   async register() {}
 
   async verifyEmail() {}
