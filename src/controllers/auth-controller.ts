@@ -1,11 +1,11 @@
 import { Router } from "express";
 
 class AuthController {
+  async login() {}
+  
   async register() {}
 
   async verifyEmail() {}
-
-  async login() {}
 }
 
 export default new AuthController();
