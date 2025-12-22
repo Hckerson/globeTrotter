@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authMiddleware } from "../common/middleware/authMiddleware";
-import iteneraryController from "../controllers/iteneraryController";
+import { authMiddleware } from "../common/middleware/auth-middleware";
+import iteneraryController from "../controllers/itenerary-controller";
 
 export class IteneraryRoute {
   private router;
