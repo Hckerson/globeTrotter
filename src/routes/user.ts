@@ -7,7 +7,7 @@ class UserRoutes {
 
   constructor() {
     this.router = express.Router();
-    this.initializeRoutes(); 
+    this.initializeRoutes();
   }
 
   initializeRoutes() {

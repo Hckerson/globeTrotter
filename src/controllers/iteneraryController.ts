@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { RequestWithUser } from "../types/req";
+import { RequestWithUser } from "../common/types/req";
 import { Itenerary } from "../models/itenerary";
 import { IteneraryItem } from "../models/iteneraryItems";
 
@@ -34,18 +34,20 @@ export class IteneraryController {
 
       await newItenerary.save();
 
-      const iteneraryId = newItenerary._id
+      const iteneraryId = newItenerary._id;
 
-      const bulkInsertOpts = iteneraryItems.map((item:Record<string,any>)=>({
-        insertOne:{
-          document:{
-            iteneraryId,
-            ...item
-          }
-        }
-      }))
+      const bulkInsertOpts = iteneraryItems.map(
+        (item: Record<string, any>) => ({
+          insertOne: {
+            document: {
+              iteneraryId,
+              ...item,
+            },
+          },
+        })
+      );
 
-      await IteneraryItem.bulkWrite(bulkInsertOpts)
+      await IteneraryItem.bulkWrite(bulkInsertOpts);
 
       return res.status(200).json({
         success: true,
@@ -56,7 +58,6 @@ export class IteneraryController {
       throw error;
     }
   }
-
 }
 
 export default new IteneraryController();

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../../models/user";
-import { RequestWithUser } from "../../types/req";
+import { RequestWithUser } from "../types/req";
 import { Request, Response, NextFunction } from "express";
 import { FRONTEND_URL } from "../constant";
 

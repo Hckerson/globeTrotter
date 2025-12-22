@@ -4,9 +4,9 @@ import logger from "morgan";
 import cookieParser from "cookie-parser";
 import express from "express";
 
-import userRoute from "./routes/user";
-import authRoute from "./routes/auth";
-import iteneraryRoute from "./routes/itenerary";
+import userRoute from "./src/routes/user";
+import authRoute from "./src/routes/auth";
+import iteneraryRoute from "./src/routes/itenerary";
 
 const app = express();
 
