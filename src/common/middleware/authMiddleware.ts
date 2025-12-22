@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../../models/user";
 import { RequestWithUser } from "../types/req";
 import { Request, Response, NextFunction } from "express";
-import { FRONTEND_URL } from "../constant";
+import { FRONTEND_URL } from "../../lib/constant";
 
 const jwtsecret = process.env.JWT_SECRET || "";
 

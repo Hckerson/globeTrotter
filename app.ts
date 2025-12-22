@@ -3,7 +3,6 @@ import "dotenv/config";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import express from "express";
-
 import userRoute from "./src/routes/user";
 import authRoute from "./src/routes/auth";
 import iteneraryRoute from "./src/routes/itenerary";
