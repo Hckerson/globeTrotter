@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { AuthError } from "../common/errors/auth.error";
+import { AuthError } from "../../common/errors/auth.error";
 
 class AuthController {
   async login(req: Request, res: Response) {

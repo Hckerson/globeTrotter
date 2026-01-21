@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { authMiddleware } from "../common/middleware/auth-middleware";
-import iteneraryController from "../controllers/itenerary-controller";
+import iteneraryController from "../controllers/itenerary/itenerary-controller";
+
 
 export class IteneraryRoute {
-  private router:Router;
+  private router: Router;
   constructor() {
     this.router = Router();
     this.initializeRoutes();
@@ -13,7 +14,7 @@ export class IteneraryRoute {
     this.router.post(
       "/itenerary/create",
       authMiddleware,
-      iteneraryController.CreateItenerary.bind(iteneraryController)
+      iteneraryController.CreateItenerary.bind(iteneraryController),
     );
   }
 
