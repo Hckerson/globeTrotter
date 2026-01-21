@@ -1,5 +1,5 @@
 export interface AllUserLookUp {
   limit: string;
   page: string;
-  search: string;
+  search?: string;
 }

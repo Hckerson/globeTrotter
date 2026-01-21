@@ -1,4 +1,5 @@
 import { User } from "../models/user";
+import { AllUserLookUp } from "../common/interface/user.interface";
 
 export class UserRepository {
   private users: typeof User;
@@ -6,7 +7,7 @@ export class UserRepository {
     this.users = User;
   }
 
-  async fetchAllUsers() {
+  async fetchAllUsers(userLookup: AllUserLookUp) {
     try {
       const response = await this.users.find();
       return response;
