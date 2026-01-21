@@ -1,7 +1,6 @@
 import { Response } from "express";
-import { RequestWithUser } from "../common/types/req";
-import { Itenerary } from "../models/itenerary";
-import { IteneraryItem } from "../models/iteneraryItems";
+import { RequestWithUser } from "../../common/types/req";
+import { Itenerary } from "../../models/itenerary";
 
 export class IteneraryController {
   constructor() {}
@@ -47,7 +46,6 @@ export class IteneraryController {
         })
       );
 
-      await IteneraryItem.bulkWrite(bulkInsertOpts);
 
       return res.status(200).json({
         success: true,

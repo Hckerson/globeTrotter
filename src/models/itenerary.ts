@@ -14,9 +14,7 @@ const itenerarySchema = new Schema({
   createdAt: { type: Date, default: Date.now() },
 });
 
-itenerarySchema.pre('save', function(){
-
-})
+itenerarySchema.pre("save", function () {});
 
 const Itenerary = model("Itenerary", itenerarySchema);
 

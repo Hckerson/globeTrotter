@@ -2,7 +2,7 @@ import * as mongoose from "mongoose";
 const { MONGO_USERNAME, MONGO_PASSWORD } = process.env;
 
 const MONGO_CONNECTION_STRING = `mongodb+srv://${MONGO_USERNAME}:${encodeURIComponent(
-  MONGO_PASSWORD ?? ""
+  MONGO_PASSWORD ?? "",
 )}@globetrotter.0yyk4lm.mongodb.net/globe?retryWrites=true&w=majority&appName=globeTrotter`;
 
 async function connectMongoose() {
@@ -14,4 +14,4 @@ async function connectMongoose() {
 
 connectMongoose();
 
-export default mongoose
+export default mongoose;

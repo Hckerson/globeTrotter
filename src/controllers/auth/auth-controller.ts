@@ -4,7 +4,8 @@ import { AuthError } from "../../common/errors/auth.error";
 class AuthController {
   async login(req: Request, res: Response) {
     try {
-      const { username, email, role, password } = req.body;
+      const { username = "", email = "", role = "", password = "" } = req.body;
+      
       res.status(200).json({ message: "Login successful" });
     } catch (error) {
       throw new AuthError("Internal server error");
