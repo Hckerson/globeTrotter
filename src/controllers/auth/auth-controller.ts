@@ -5,6 +5,7 @@ class AuthController {
   async login(req: Request, res: Response) {
     try {
       const { username = "", email = "", role = "", password = "" } = req.body;
+
       
       res.status(200).json({ message: "Login successful" });
     } catch (error) {
@@ -16,7 +17,15 @@ class AuthController {
     return res.json({ message: "Google login successful" });
   }
 
-  async register() {}
+  async register() {
+    try {
+      
+    } catch (error) {
+      console.error("Error registering user", error);
+      throw error;
+    }
+
+  }
 
   async verifyEmail() {}
 }

@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { RequestWithUser } from "../../common/types/req";
+import { RequestWithUser } from "../../common/interface/req";
 import { Itenerary } from "../../models/itenerary";
 
 export class IteneraryController {
@@ -43,9 +43,8 @@ export class IteneraryController {
               ...item,
             },
           },
-        })
+        }),
       );
-
 
       return res.status(200).json({
         success: true,

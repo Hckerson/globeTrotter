@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RequestWithUser } from "../../common/types/req";
+import { RequestWithUser } from "../../common/interface/req";
 import { UserRepository } from "../../repositories/user.repository";
 class UserController {
   private userRepository: UserRepository;
