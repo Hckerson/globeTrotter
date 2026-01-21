@@ -1,11 +1,9 @@
 import cors from "cors";
 import "dotenv/config";
 import logger from "morgan";
-import cookieParser from "cookie-parser";
 import express from "express";
-import userRoute from "./src/routes/user";
-import authRoute from "./src/routes/auth";
-import iteneraryRoute from "./src/routes/itenerary";
+import cookieParser from "cookie-parser";
+import baseRoutes from "./src/routes/base";
 
 const app = express();
 
@@ -15,7 +13,7 @@ app.use(
     credentials: true,
     optionsSuccessStatus: 200,
     allowedHeaders: ["Content-Type", "Autcreateclihorization"],
-  })
+  }),
 );
 
 app.use(logger("dev"));
@@ -34,10 +32,7 @@ app.use("/v1", (req, res, next) => {
 });
 
 // mount routes
-app.use("/v1", userRoute);
-app.use("/v1", authRoute);
-app.use("/v1", iteneraryRoute);
-
+app.use("/v1", baseRoutes);
 const port = process.env.PORT || 4000;
 
 app.listen(port, () => {

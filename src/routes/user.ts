@@ -1,9 +1,9 @@
-import express from "express";
+import express, { Router } from "express";
 import userController from "../controllers/user-controller";
 import { authMiddleware } from "../common/middleware/auth-middleware";
 
 class UserRoutes {
-  private router;
+  private router: Router;
 
   constructor() {
     this.router = express.Router();

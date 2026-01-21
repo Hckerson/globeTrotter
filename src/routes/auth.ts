@@ -1,24 +1,26 @@
-import express from "express";
+import express, { Router } from "express";
 import authController from "../controllers/auth-controller";
 
-const { Router } = express;
-
 class AuthRoutes {
-  private router;
+  private router: Router;
   constructor() {
-    this.router = Router();
+    this.router = express.Router();
     this.initializeRoutes();
   }
 
   initializeRoutes() {
-    this.router.get("/auth/login", authController.login.bind(authController));
+    this.router.post("/auth/login", authController.login.bind(authController));
+    this.router.post(
+      "/auth/google/login",
+      authController.login.bind(authController),
+    );
     this.router.post(
       "/auth/signup",
-      authController.register.bind(authController)
+      authController.register.bind(authController),
     );
-    this.router.get(
+    this.router.post(
       "/auth/verify-email",
-      authController.verifyEmail.bind(authController)
+      authController.verifyEmail.bind(authController),
     );
   }
 

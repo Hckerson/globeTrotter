@@ -3,7 +3,7 @@ import { authMiddleware } from "../common/middleware/auth-middleware";
 import iteneraryController from "../controllers/itenerary-controller";
 
 export class IteneraryRoute {
-  private router;
+  private router:Router;
   constructor() {
     this.router = Router();
     this.initializeRoutes();
