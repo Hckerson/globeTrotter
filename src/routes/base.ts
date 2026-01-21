@@ -12,6 +12,7 @@ class BaseRoutes {
 
   constructor() {
     this.router = express.Router();
+    this.initializeRoutes();
   }
 
   initializeRoutes() {
