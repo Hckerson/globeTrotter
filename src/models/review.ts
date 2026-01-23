@@ -1,6 +1,5 @@
 import mongoose from "../providers/database/connection";
 const { Schema, Types } = mongoose;
-const {} = process.env;
 
 const reviewSchema = new Schema({
   userId: { type: Types.ObjectId, ref: "User", required: true },

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { RequestWithUser } from "../../common/interface/req";
 import { UserRepository } from "../../repositories/user.repository";
+import { AllUserLookUp } from "../../common/interface/user.interface";
 class UserController {
   private userRepository: UserRepository;
   constructor() {
@@ -14,7 +15,12 @@ class UserController {
   }
 
   async getAllUser(req: Request, res: Response) {
-    const users = await this.userRepository.fetchAllUsers();
+    const { limit = "10", page = "1", search = "" } = req.query;
+    const users = await this.userRepository.fetchAllUsers({
+      limit: limit as string,
+      page: page as string,
+      search: search as string,
+    });
     return res.status(200).json({
       users,
     });

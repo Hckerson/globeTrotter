@@ -3,6 +3,7 @@ import { AllUserLookUp } from "../common/interface/user.interface";
 
 export class UserRepository {
   private users: typeof User;
+  
   constructor() {
     this.users = User;
   }
