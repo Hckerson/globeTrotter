@@ -17,6 +17,11 @@ const verificationCodeSchema = new Schema({
     type: Date,
     required: true,
   },
+  type: {
+    type: String,
+    enum: ["email-verification", "password-reset"],
+    required: true,
+  },
 });
 
 const VerificationCode = model("VerificationCode", verificationCodeSchema);
