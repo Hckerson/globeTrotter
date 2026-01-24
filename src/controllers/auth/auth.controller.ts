@@ -11,9 +11,16 @@ class AuthController {
   }
   async login(req: Request, res: Response) {
     try {
-      const { username = "", email = "", role = "", password = "" } = req.body;
+      const {
+        username = "",
+        email = "",
+      } = req.body as Partial<RegisterUserDto>;
 
-      res.status(200).json({ message: "Login successful" });
+      if (!username || !email) {
+        return res.json({ message: "Username or email is required" }).status(400);
+      }
+
+      return await this.authService.login(res, req.body);
     } catch (error) {
       throw new AuthError("Internal server error");
     }
@@ -25,12 +32,7 @@ class AuthController {
 
   async register(req: Request, res: Response) {
     const registerUserData = req.body as RegisterUserDto;
-    try {
-      const response = await this.authService.register(res, registerUserData);
-      
-    } catch (error) {
-      throw error;
-    }
+    return await this.authService.register(res, registerUserData);
   }
 
   async verifyEmail() {}

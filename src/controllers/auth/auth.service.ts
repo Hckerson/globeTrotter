@@ -1,18 +1,22 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { Response } from "express";
 import { randomBytes } from "crypto";
 import { User } from "../../models/user";
+import { logger } from "../../lib/logger";
 import { config } from "../../common/config";
 import { RegisterUserDto } from "../../common/dto/user.dto";
 import { AuthError } from "../../common/errors/auth.error";
 import { Nodemailer } from "../../providers/mails/connection";
 import { EmailTemplates } from "../../../views/templates/email";
 import { VerificationCode } from "../../models/verification-code";
-import { logger } from "../../lib/logger";
+const { jwtSecret = "" } = config.auth;
 
 export class AuthService {
   private user: typeof User;
   private code: typeof VerificationCode;
   private mailService: Nodemailer;
+
   constructor() {
     this.user = User;
     this.code = VerificationCode;
@@ -59,7 +63,6 @@ export class AuthService {
           subject: "Verify your email address",
           html: template.html,
         });
-
         logger.log("Email sent", emailResponse);
 
         return res
@@ -70,8 +73,103 @@ export class AuthService {
           .status(201);
       }
     } catch (error) {
-      console.error("Error registering user");
+      logger.error("Error registering user");
       throw new AuthError("Error registering user");
+    }
+  }
+
+  async login(res: Response, loginDto: Partial<RegisterUserDto>) {
+    try {
+      const { email = "", password = "" } = loginDto;
+
+      // check for user existence
+
+      const existingUser = await this.user.findOne({ email });
+
+      if (!existingUser) {
+        return res.json({ message: "User not found" }).status(404);
+      }
+
+      // check user verification status
+
+      if (!existingUser.emailVerified) {
+        try {
+          const verificationCode = await this.code.create({
+            type: "email-verification",
+            userId: existingUser._id,
+            code: randomBytes(32).toString("hex"),
+            expiresAt: new Date(Date.now() + 3600000),
+          });
+
+          const email = existingUser.email;
+          const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}`;
+
+          const template = EmailTemplates.verifyEmail({
+            verificationLink,
+          });
+
+          const emailResponse = await this.mailService.sendEmail({
+            to: email,
+            subject: "Verify your email address",
+            html: template.html,
+          });
+          logger.log("Email sent", emailResponse);
+
+          return res.json({ message: "User not verified" }).status(401);
+        } catch (error) {
+          logger.error("Error verifying user");
+          throw new AuthError("Error verifying user");
+        }
+      }
+
+      // confirm password
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        existingUser.password,
+      );
+
+      if (!isPasswordValid) {
+        return res.json({ message: "Invalid password" }).status(401);
+      }
+
+      const accessToken = jwt.sign(
+        {
+          userId: existingUser._id,
+          role: existingUser.role,
+        },
+        jwtSecret,
+        { expiresIn: "1h", issuer: config.app.appName },
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: existingUser._id,
+          role: existingUser.role,
+        },
+        jwtSecret,
+        { expiresIn: "7d", issuer: config.app.appName },
+      );
+
+      await this.code.create({
+        type: "refresh-token",
+        userId: existingUser._id,
+        code: refreshToken,
+        expiresAt: new Date(Date.now() + 604800000),
+      });
+
+      return res
+        .json({
+          message: "Login successful",
+          data: {
+            accessToken,
+            refreshToken,
+            user: existingUser,
+          },
+        })
+        .status(200);
+    } catch (error) {
+      logger.error("Error logging in user");
+      throw new AuthError("Error logging in user");
     }
   }
 }

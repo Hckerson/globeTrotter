@@ -19,7 +19,7 @@ const verificationCodeSchema = new Schema({
   },
   type: {
     type: String,
-    enum: ["email-verification", "password-reset"],
+    enum: ["email-verification", "password-reset", "refresh-token"],
     required: true,
   },
 });
