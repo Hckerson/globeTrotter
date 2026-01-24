@@ -1,8 +1,9 @@
 import { services } from "../services";
+import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
-import { Request, Response, Router } from "express";
 import { AuthError } from "../../common/errors/auth.error";
 import { RegisterUserDto } from "../../common/dto/user.dto";
+import { logger } from "../../lib/logger";
 
 class AuthController {
   private authService: AuthService;
@@ -11,13 +12,13 @@ class AuthController {
   }
   async login(req: Request, res: Response) {
     try {
-      const {
-        username = "",
-        email = "",
-      } = req.body as Partial<RegisterUserDto>;
+      const { username = "", email = "" } =
+        req.body as Partial<RegisterUserDto>;
 
       if (!username || !email) {
-        return res.json({ message: "Username or email is required" }).status(400);
+        return res
+          .status(400)
+          .json({ message: "Username or email is required" });
       }
 
       return await this.authService.login(res, req.body);
@@ -35,7 +36,23 @@ class AuthController {
     return await this.authService.register(res, registerUserData);
   }
 
-  async verifyEmail() {}
+  async verifyEmail(req: Request, res: Response) {
+    try {
+      const { token = "", userId = "" } = req.query;
+      if (!token || !userId)
+        return res
+          .status(400)
+          .json({ message: "Token or userId is missing in request" });
+      return await this.authService.verifyEmail(
+        res,
+        token as string,
+        userId as string,
+      );
+    } catch (error) {
+      logger.log("Verify email error", error);
+      throw new AuthError("Internal server error");
+    }
+  }
 }
 
 export default new AuthController();

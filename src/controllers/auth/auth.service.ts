@@ -115,7 +115,7 @@ export class AuthService {
           });
           logger.log("Email sent", emailResponse);
 
-          return res.json({ message: "User not verified" }).status(401);
+          return res.status(401).json({ message: "User not verified" });
         } catch (error) {
           logger.error("Error verifying user");
           throw new AuthError("Error verifying user");
@@ -129,7 +129,7 @@ export class AuthService {
       );
 
       if (!isPasswordValid) {
-        return res.json({ message: "Invalid password" }).status(401);
+        return res.status(401).json({ message: "Invalid password" });
       }
 
       const accessToken = jwt.sign(
@@ -157,19 +157,53 @@ export class AuthService {
         expiresAt: new Date(Date.now() + 604800000),
       });
 
-      return res
-        .json({
-          message: "Login successful",
-          data: {
-            accessToken,
-            refreshToken,
-            user: existingUser,
-          },
-        })
-        .status(200);
+      return res.status(200).json({
+        message: "Login successful",
+        data: {
+          accessToken,
+          refreshToken,
+          user: existingUser,
+        },
+      });
     } catch (error) {
       logger.error("Error logging in user");
       throw new AuthError("Error logging in user");
+    }
+  }
+
+  async verifyEmail(res: Response, token: string, userId: string) {
+    try {
+      // fetch verificationCode
+      const codeData = await this.code.findOne({
+        userId,
+        code: token,
+        type: "email-verification",
+      });
+
+      if (!codeData)
+        return res.status(401).json({ message: "Invalid verification code" });
+
+      const code = codeData.code;
+      const expiresAt = codeData.expiresAt;
+
+      // verify code
+
+      if (new Date(expiresAt) < new Date()) {
+        return res.status(401).json({ message: "Verification code expired" });
+      }
+
+      if (code !== token) {
+        return res.status(401).json({ message: "Invalid verification code" });
+      }
+
+      // update user status
+
+      await this.user.updateOne({ _id: userId }, { emailVerified: true });
+
+      return res.status(200).json({ message: "Email verified successfully" });
+    } catch (error) {
+      logger.error("Error verifying email", error);
+      throw new AuthError("Error verifying email");
     }
   }
 }

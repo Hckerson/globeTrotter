@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { RequestWithUser } from "../../common/interface/req";
 import { UserRepository } from "../../repositories/user.repository";
 import { AllUserLookUp } from "../../common/interface/user.interface";
+
+
 class UserController {
   private userRepository: UserRepository;
   constructor() {
