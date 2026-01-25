@@ -10,15 +10,16 @@ import { AuthError } from "../../common/errors/auth.error";
 import { Nodemailer } from "../../providers/mails/connection";
 import { EmailTemplates } from "../../../views/templates/email";
 import { VerificationCode } from "../../models/verification-code";
+import { UserRepository } from "../../repositories/user.repository";
 const { jwtSecret = "" } = config.auth;
 
 export class AuthService {
-  private user: typeof User;
+  private user: UserRepository;
   private code: typeof VerificationCode;
   private mailService: Nodemailer;
 
   constructor() {
-    this.user = User;
+    this.user = new UserRepository();
     this.code = VerificationCode;
     this.mailService = new Nodemailer();
   }
@@ -28,7 +29,7 @@ export class AuthService {
 
     try {
       // find existing user
-      const existingUser = await this.user.findOne({ email });
+      const existingUser = await this.user.findUserByEmail(email);
 
       if (existingUser)
         return res
@@ -39,7 +40,7 @@ export class AuthService {
           .status(409);
 
       // create new user
-      const user = await this.user.create(registerDto);
+      const user = await this.user.createNewUser(registerDto);
 
       if (user) {
         // create verification code
@@ -52,7 +53,7 @@ export class AuthService {
         });
 
         const email = user.email;
-        const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}`;
+        const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}&userId=${user._id}`;
 
         const template = EmailTemplates.verifyEmail({
           verificationLink,
@@ -84,7 +85,7 @@ export class AuthService {
 
       // check for user existence
 
-      const existingUser = await this.user.findOne({ email });
+      const existingUser = await this.user.findUserByEmail(email);
 
       if (!existingUser) {
         return res.json({ message: "User not found" }).status(404);
@@ -102,7 +103,7 @@ export class AuthService {
           });
 
           const email = existingUser.email;
-          const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}`;
+          const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}&userId=${existingUser._id}`;
 
           const template = EmailTemplates.verifyEmail({
             verificationLink,
@@ -198,7 +199,7 @@ export class AuthService {
 
       // update user status
 
-      await this.user.updateOne({ _id: userId }, { emailVerified: true });
+      await this.user.updateUserById(userId, { emailVerified: true });
 
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {

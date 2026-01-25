@@ -1,4 +1,3 @@
-import { services } from "../services";
 import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { AuthError } from "../../common/errors/auth.error";
@@ -8,14 +7,14 @@ import { logger } from "../../lib/logger";
 class AuthController {
   private authService: AuthService;
   constructor() {
-    this.authService = services.authService;
+    this.authService = new AuthService();
   }
   async login(req: Request, res: Response) {
     try {
       const { username = "", email = "" } =
         req.body as Partial<RegisterUserDto>;
 
-      if (!username || !email) {
+      if (!username && !email) {
         return res
           .status(400)
           .json({ message: "Username or email is required" });
@@ -38,14 +37,15 @@ class AuthController {
 
   async verifyEmail(req: Request, res: Response) {
     try {
-      const { token = "", userId = "" } = req.query;
-      if (!token || !userId)
+      const { code = "", userId = "" } = req.query;
+      if (!code || !userId)
         return res
           .status(400)
           .json({ message: "Token or userId is missing in request" });
+
       return await this.authService.verifyEmail(
         res,
-        token as string,
+        code as string,
         userId as string,
       );
     } catch (error) {

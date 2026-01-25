@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import destinationController from "../controllers/destination/destination.controller";
 
 class DestinationRoutes {
   private router: Router;
@@ -9,7 +10,10 @@ class DestinationRoutes {
   }
 
   initializeRoutes() {
-    this.router.get("/destination");
+    this.router.get(
+      "/destination/:city/all",
+      destinationController.fetchAllDestination.bind(destinationController),
+    );
   }
 
   getRouter() {
