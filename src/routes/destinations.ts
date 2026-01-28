@@ -11,8 +11,8 @@ class DestinationRoutes {
 
   initializeRoutes() {
     this.router.get(
-      "/destination/:city/all",
-      destinationController.fetchAllDestination.bind(destinationController),
+      "/destination/:city",
+      destinationController.fetchLocationData.bind(destinationController),
     );
   }
 

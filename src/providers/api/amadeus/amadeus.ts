@@ -37,7 +37,7 @@ export class AmadeusBaseClass {
     }
   }
 
-  async fetchToursandActivitiesByLocation(location: string) {
+  async fetchLocationData(location: string) {
     try {
     } catch (error) {
       logger.error("Error fetching tours and activities by location", error);

@@ -8,11 +8,16 @@ class DestinationController {
     this.destinationService = new DestinationService();
   }
 
-  async fetchAllDestination(req: Request, res: Response) {
+  async fetchLocationData(req: Request, res: Response) {
     const { city = "" } = req.params;
+    if (!city.trim()) {
+      return res.status(400).json({ message: "City is required" });
+    }
     try {
+      return await this.destinationService.fetchLocationData(city);
     } catch (error) {
       logger.error("Error fetching all destinations", error);
+      throw error
     }
   }
 }
