@@ -17,7 +17,7 @@ export class AxiosClient {
     const baseAxiosConfig = {
       baseURL: this.baseUrl,
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
     };
     return axios.create(baseAxiosConfig);
@@ -40,7 +40,7 @@ export class AxiosClient {
       const response = await this.axiosInstance.request({
         url,
         ...configObject,
-        headers: { ...headerBody },
+        headers: { ...configObject.headers, ...headerBody },
       });
 
       // create api response

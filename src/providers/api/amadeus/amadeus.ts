@@ -54,7 +54,7 @@ export class AmadeusBaseClass {
     try {
       // construct the bulk request payload
 
-      const bulkRequest = geoLocations.map((location) => {
+      const bulkRequest = geoLocations.slice(0, 1).map((location) => {
         return this.axiosClient.get("/shopping/activities", {
           params: {
             latitude: location.lat,
@@ -76,8 +76,7 @@ export class AmadeusBaseClass {
           logger.log("Amadeus token expired, refreshing...");
           const token = await this.requestToken();
           if (token) {
-            config.api.amadeus.apiKey = token.access_token;
-            this.apiKey = token.access_token;
+            config.api.amadeus.accessToken = token.access_token;
             return this.fetchLocationData(location);
           }
         }
