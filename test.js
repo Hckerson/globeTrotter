@@ -1,4 +1,8 @@
 
-const auth = async (req, res, next)=>{
-  next()
-}
+
+const q = new URLSearchParams({
+  name:"london",
+  dick:''
+})
+
+console.log(q)

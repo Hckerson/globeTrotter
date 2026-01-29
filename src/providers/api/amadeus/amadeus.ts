@@ -3,7 +3,7 @@ import { logger } from "../../../lib/logger";
 import { AxiosClient } from "../axios-client";
 import { config } from "../../../common/config";
 import { AmadeusError } from "../../../common/errors/api.error";
-import { AmadeusOAuth2Token } from "../../../common/interface/amadeus";
+import { AmadeusOAuth2Token } from "../../../common/interface/externals/amadeus";
 
 export class AmadeusBaseClass {
   private apiKey: string;
