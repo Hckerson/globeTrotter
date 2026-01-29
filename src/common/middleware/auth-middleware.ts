@@ -1,9 +1,18 @@
 import jwt from "jsonwebtoken";
 import { logger } from "../../lib/logger";
-import { NextFunction, Request, Response } from "express";
 import { config } from "../../common/config";
+import { NextFunction, Request, Response } from "express";
+import { UserRepository } from "../../repositories/user.repository";
+import { CodeRepository } from "../../repositories/code.repository";
 
-const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const users = new UserRepository();
+const codes = new CodeRepository();
+
+const authMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { authorization = "" } = req.headers;
 
@@ -16,6 +25,22 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
     // verify token
     const token = authorization.split("Bearer ")[1];
+    const { verified } = await verifyAuthHeader(token);
+    if (!verified) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return next();
+  } catch (error) {
+    logger.error("Error in auth middleware", error);
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
+async function verifyAuthHeader(token: string) {
+  if (!token) return { verified: false, data: null };
+
+  try {
     const payload = jwt.verify(
       token,
       config.auth.jwtSecret || "",
@@ -24,12 +49,33 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     if (payload) {
       const userId = payload?.userId;
 
+      // check if token is valid
+
+      const code = await codes.fetchCodeById(userId, "refresh-token");
+
+      if (
+        !code ||
+        code.expiresAt < new Date() ||
+        code.code !== token ||
+        code.type !== "refresh-token" ||
+        code.userId !== userId
+      ) {
+        return { verified: false, data: null };
+      }
+
       // find user
-      const user = []
+      const user = await users.findUserById(userId);
+      
+      if (user) {
+        return { verified: true, data: user };
+      }
     }
+
+    return { verified: false, data: null };
   } catch (error) {
-    logger.error("Error in auth middleware", error);
-    return res.status(401).json({ message: "Unauthorized" });
+    logger.error("Error verifying auth header", error);
+    return { verified: false, data: null };
   }
-};
-export { authMiddleware };
+}
+
+export { authMiddleware, verifyAuthHeader };

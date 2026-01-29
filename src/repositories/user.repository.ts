@@ -30,6 +30,16 @@ export class UserRepository {
     }
   }
 
+  async findUserById(id: string){
+    try {
+      const response = await this.users.findById(id)
+      return response
+    } catch (error) {
+      logger.error("Error fetching user by id", error)
+      throw error
+    }
+  }
+
   async createNewUser(createUserDto: RegisterUserDto) {
     try {
       const response = await this.users.create(createUserDto);

@@ -22,6 +22,10 @@ class AuthRoutes {
       "/auth/verify-email",
       authController.verifyEmail.bind(authController),
     );
+    this.router.get(
+      "/auth/refresh-token",
+      authController.refreshToken.bind(authController),
+    );
   }
 
   getRouter() {

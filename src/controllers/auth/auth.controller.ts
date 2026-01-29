@@ -1,8 +1,11 @@
+import * as jwt from "jsonwebtoken";
+import { logger } from "../../lib/logger";
 import { Request, Response } from "express";
+import { config } from "../../common/config";
 import { AuthService } from "./auth.service";
 import { AuthError } from "../../common/errors/auth.error";
 import { RegisterUserDto } from "../../common/dto/user.dto";
-import { logger } from "../../lib/logger";
+import { verifyAuthHeader } from "../../common/middleware/auth-middleware";
 
 class AuthController {
   private authService: AuthService;
@@ -52,6 +55,21 @@ class AuthController {
       logger.log("Verify email error", error);
       throw new AuthError("Internal server error");
     }
+  }
+
+  async refreshToken(req: Request, res: Response) {
+    const header = req.header("authorization");
+    if (!header || !header.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    const token = header.split("Bearer ")[1];
+    const { verified , data} = await verifyAuthHeader(token);
+    if (!verified) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return this.authService.refreshToken(res, data)
   }
 }
 

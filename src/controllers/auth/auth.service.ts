@@ -11,6 +11,7 @@ import { Nodemailer } from "../../providers/mails/connection";
 import { EmailTemplates } from "../../../views/templates/email";
 import { VerificationCode } from "../../models/verification-code";
 import { UserRepository } from "../../repositories/user.repository";
+
 const { jwtSecret = "" } = config.auth;
 
 export class AuthService {
@@ -148,14 +149,14 @@ export class AuthService {
           role: existingUser.role,
         },
         jwtSecret,
-        { expiresIn: "7d", issuer: config.app.appName },
+        { expiresIn: "1d", issuer: config.app.appName },
       );
 
       await this.code.create({
         type: "refresh-token",
         userId: existingUser._id,
         code: refreshToken,
-        expiresAt: new Date(Date.now() + 604800000),
+        expiresAt: new Date(Date.now() + 86400000),
       });
 
       return res.status(200).json({
@@ -163,7 +164,6 @@ export class AuthService {
         data: {
           accessToken,
           refreshToken,
-          user: existingUser,
         },
       });
     } catch (error) {
@@ -205,6 +205,47 @@ export class AuthService {
     } catch (error) {
       logger.error("Error verifying email", error);
       throw new AuthError("Error verifying email");
+    }
+  }
+
+  async refreshToken(res: Response, data: any) {
+    try {
+      const accessToken = jwt.sign(
+        {
+          userId: data._id,
+          role: data.role,
+        },
+        jwtSecret,
+        { expiresIn: "1h", issuer: config.app.appName },
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: data._id,
+          role: data.role,
+        },
+        jwtSecret,
+        { expiresIn: "1d", issuer: config.app.appName },
+      );
+
+      await this.code.updateOne(
+        { _id: data._id },
+        {
+          code: refreshToken,
+          expiresAt: new Date(Date.now() + 86400000),
+        },
+      );
+
+      return res.status(200).json({
+        message: "Token refreshed successfully",
+        data: {
+          accessToken,
+          refreshToken,
+        },
+      });
+    } catch (error) {
+      console.error("Error refreshing token", error);
+      throw new AuthError("Error refreshing token");
     }
   }
 }
