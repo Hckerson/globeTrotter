@@ -44,17 +44,22 @@ export class AmadeusBaseClass {
 
     try {
       // construct the bulk request payload
+
       const bulkRequest = geoLocations.map((location) => {
         return this.axiosClient.get("/shopping/activities", {
           params: {
             latitude: location.lat,
             longitude: location.lon,
           },
+          headers: {
+            Authorization: `Bearer ${config.api.amadeus.apiKey}`,
+          },
         });
       });
+      console.log(bulkRequest);
+      // const responses = await Promise.all(bulkRequest);
 
-      const responses = await Promise.all(bulkRequest);
-      return responses.forEach((response) => response.data);
+      // return responses.map((response) => response.data);
     } catch (error) {
       logger.error("Error fetching tours and activities by location", error);
       throw new AmadeusError("Error fetching tours and activities by location");

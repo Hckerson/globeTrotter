@@ -20,5 +20,9 @@ export const config = {
       apiSecret: process.env.AMADEUS_API_SECRET,
       baseUrl: process.env.AMADEUS_BASE_URL,
     },
+    openWeather: {
+      baseUrl: process.env.OPENWEATHER_BASE_URL || "",
+      apiKey: process.env.OPENWEATHER_API_KEY || "",
+    },
   },
 };

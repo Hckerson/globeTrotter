@@ -11,7 +11,7 @@ class DestinationRoutes {
 
   initializeRoutes() {
     this.router.get(
-      "/destination/:city",
+      "/destination/search",
       destinationController.fetchLocationData.bind(destinationController),
     );
   }

@@ -6,6 +6,9 @@ export class AxiosClient {
   private axiosInstance: AxiosInstance;
 
   constructor(baseUrl: string) {
+    if (!baseUrl) {
+      throw new Error("AxiosClient requires a baseUrl");
+    }
     this.baseUrl = baseUrl;
     this.axiosInstance = this.createAxiosInstance();
   }
@@ -25,6 +28,7 @@ export class AxiosClient {
       method: config.method,
       params: config?.params,
       timeout: config?.timeout,
+      headers: config?.headers,
     };
     const { headers, ...rest } = configObject;
     const headerBody: Record<string, any> = {};
@@ -37,12 +41,15 @@ export class AxiosClient {
         configObject.data = body;
       } else {
         configObject.data = body;
-      } 
+      }
+
+
       const response = await this.axiosInstance.request({
         url,
         ...rest,
         headers: { ...headers, ...headerBody },
       });
+
       // create api response
 
       const apiResponse: ApiResponse<T> = {

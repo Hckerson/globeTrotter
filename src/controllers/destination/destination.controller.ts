@@ -9,15 +9,17 @@ class DestinationController {
   }
 
   async fetchLocationData(req: Request, res: Response) {
-    const { city = "" } = req.params;
-    if (!city.trim()) {
+    const queries = req.query;
+    const city = queries?.city as string;
+
+    if (!city || !city.trim()) {
       return res.status(400).json({ message: "City is required" });
     }
     try {
-      return await this.destinationService.fetchLocationData(city);
+      return await this.destinationService.fetchLocationData(res, city);
     } catch (error) {
       logger.error("Error fetching all destinations", error);
-      throw error
+      throw error;
     }
   }
 }
