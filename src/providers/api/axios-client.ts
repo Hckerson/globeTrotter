@@ -29,25 +29,18 @@ export class AxiosClient {
       params: config?.params,
       timeout: config?.timeout,
       headers: config?.headers,
+      data: body,
     };
-    const { headers, ...rest } = configObject;
+
     const headerBody: Record<string, any> = {};
     try {
-      if (typeof body == "object") {
-        headerBody["Content-Type"] = "application/json";
-        configObject.data = JSON.stringify(body);
-      } else if (body instanceof FormData) {
+      if (body instanceof FormData) {
         headerBody["Content-Type"] = "multipart/form-data";
-        configObject.data = body;
-      } else {
-        configObject.data = body;
       }
-
-
       const response = await this.axiosInstance.request({
         url,
-        ...rest,
-        headers: { ...headers, ...headerBody },
+        ...configObject,
+        headers: { ...headerBody },
       });
 
       // create api response

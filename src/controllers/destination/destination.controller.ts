@@ -18,10 +18,25 @@ class DestinationController {
     try {
       return await this.destinationService.fetchLocationData(res, city);
     } catch (error) {
-      logger.error("Error fetching all destinations", error);
-      throw error;
+      logger.error("Error fetching location data", error);
+      return res.status(500).json({
+        message: "Internal Server Error",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  }
+
+  async refreshToken(req: Request, res: Response) {
+    try {
+      return await this.destinationService.refreshToken(res);
+    } catch (error) {
+      logger.error("Error refreshing token", error);
+      return res.status(500).json({
+        message: "Internal Server Error",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
     }
   }
 }
 
-export default new DestinationController();
+export default new DestinationController(); 

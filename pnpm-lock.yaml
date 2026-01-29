@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@types/qs':
+        specifier: ^6.14.0
+        version: 6.14.0
       axios:
         specifier: ^1.13.2
         version: 1.13.2(debug@2.6.9)
@@ -47,6 +50,9 @@ importers:
       nodemailer:
         specifier: ^7.0.11
         version: 7.0.11
+      qs:
+        specifier: ^6.14.1
+        version: 6.14.1
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -1127,8 +1133,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  qs@6.14.0:
-    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
+  qs@6.14.1:
+    resolution: {integrity: sha512-4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==}
     engines: {node: '>=0.6'}
 
   qs@6.5.2:
@@ -2257,7 +2263,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.1
       on-finished: 2.4.1
-      qs: 6.14.0
+      qs: 6.14.1
       raw-body: 3.0.2
       type-is: 2.0.1
     transitivePeerDependencies:
@@ -2689,7 +2695,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  qs@6.14.0:
+  qs@6.14.1:
     dependencies:
       side-channel: 1.1.0
 

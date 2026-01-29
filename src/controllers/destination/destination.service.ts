@@ -19,4 +19,16 @@ export class DestinationService {
       throw error;
     }
   }
+
+  async refreshToken(res: Response) {
+    try {
+      const token = await this.amadeusService.requestToken();
+      return res
+        .status(200)
+        .json({ message: "Token refresh successful", data: token });
+    } catch (error) {
+      logger.error("Error refreshing token", error);
+      throw error;
+    }
+  }
 }

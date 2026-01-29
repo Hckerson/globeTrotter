@@ -1,10 +1,12 @@
+import qs from "qs";
 import { amadeusConfig } from "./config";
+import axios from "axios";
 import { logger } from "../../../lib/logger";
 import { AxiosClient } from "../axios-client";
 import { config } from "../../../common/config";
 import { AmadeusError } from "../../../common/errors/api.error";
-import { AmadeusOAuth2Token } from "../../../common/interface/externals/amadeus";
 import { getGeoCoordinates } from "../open-weather/open-weather";
+import { AmadeusOAuth2Token } from "../../../common/interface/externals/amadeus";
 
 export class AmadeusBaseClass {
   private apiKey: string;
@@ -17,19 +19,26 @@ export class AmadeusBaseClass {
     this.apiSecret = config.api.amadeus.apiSecret || "";
     this.baseUrl = config.api.amadeus.baseUrl || "";
     this.axiosClient = new AxiosClient(this.baseUrl);
+
+    if (!this.apiKey || !this.apiSecret || !this.baseUrl) {
+      throw new Error("Amadeus API key, secret, or base URL not found");
+    }
   }
 
   async requestToken(): Promise<AmadeusOAuth2Token | null> {
     try {
-      const response = await this.axiosClient.get<AmadeusOAuth2Token>(
+      const response = await this.axiosClient.post<AmadeusOAuth2Token>(
         amadeusConfig.requestToken,
         {
-          params: {
-            grant_type: "client_credentials",
-            client_id: this.apiKey,
-            client_secret: this.apiSecret,
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         },
+        qs.stringify({
+          grant_type: "client_credentials",
+          client_id: this.apiKey,
+          client_secret: this.apiSecret,
+        }),
       );
       return response.data;
     } catch (error) {
@@ -38,7 +47,7 @@ export class AmadeusBaseClass {
     }
   }
 
-  async fetchLocationData(location: string) {
+  async fetchLocationData(location: string): Promise<any[]> {
     // fetch possible location data
     const geoLocations = await getGeoCoordinates(location);
 
@@ -52,17 +61,31 @@ export class AmadeusBaseClass {
             longitude: location.lon,
           },
           headers: {
-            Authorization: `Bearer ${config.api.amadeus.apiKey}`,
+            Authorization: `Bearer ${config.api.amadeus.accessToken}`,
           },
         });
       });
-      console.log(bulkRequest);
-      // const responses = await Promise.all(bulkRequest);
+      const responses = await Promise.all(bulkRequest);
 
-      // return responses.map((response) => response.data);
+      return responses.map((response) => response.data);
     } catch (error) {
       logger.error("Error fetching tours and activities by location", error);
-      throw new AmadeusError("Error fetching tours and activities by location");
+      // check if error is axios error
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401 || (error as any).cause === 401) {
+          logger.log("Amadeus token expired, refreshing...");
+          const token = await this.requestToken();
+          if (token) {
+            config.api.amadeus.apiKey = token.access_token;
+            this.apiKey = token.access_token;
+            return this.fetchLocationData(location);
+          }
+        }
+      }
+      throw new AmadeusError(
+        "Error fetching tours and activities by location",
+        axios.isAxiosError(error) ? error.response?.status : 500,
+      );
     }
   }
 }
