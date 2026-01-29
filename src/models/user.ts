@@ -24,7 +24,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    role: { type: String, enum: ["admin", "user"], required: true },
+    role: { type: String, enum: ["admin", "user", "partner"], required: true },
     password: { type: String, required: true, minLength: 4, maxLength: 12 },
     reviews: [reviewSchema],
   },

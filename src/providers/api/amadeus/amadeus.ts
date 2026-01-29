@@ -4,6 +4,7 @@ import { AxiosClient } from "../axios-client";
 import { config } from "../../../common/config";
 import { AmadeusError } from "../../../common/errors/api.error";
 import { AmadeusOAuth2Token } from "../../../common/interface/externals/amadeus";
+import { getGeoCoordinates } from "../open-weather/open-weather";
 
 export class AmadeusBaseClass {
   private apiKey: string;
@@ -38,7 +39,22 @@ export class AmadeusBaseClass {
   }
 
   async fetchLocationData(location: string) {
+    // fetch possible location data
+    const geoLocations = await getGeoCoordinates(location);
+
     try {
+      // construct the bulk request payload
+      const bulkRequest = geoLocations.map((location) => {
+        return this.axiosClient.get("/shopping/activities", {
+          params: {
+            latitude: location.lat,
+            longitude: location.lon,
+          },
+        });
+      });
+
+      const responses = await Promise.all(bulkRequest);
+      return responses.forEach((response) => response.data);
     } catch (error) {
       logger.error("Error fetching tours and activities by location", error);
       throw new AmadeusError("Error fetching tours and activities by location");

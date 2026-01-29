@@ -1,9 +1,8 @@
 interface LocationLookup {
-  country?: string;
   city: string;
 }
 
-interface ResponseObject {
+interface OpenWeatherResponseObject {
   name: string;
   lat: number;
   lon: number;
@@ -17,7 +16,7 @@ interface LocalNames {
 
 interface GeoLookupResponse {
   name: string;
-  local_names: LocalNames[];
+  local_names?: LocalNames[];
   lat: number;
   lon: number;
   country: string;

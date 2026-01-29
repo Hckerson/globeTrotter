@@ -6,10 +6,10 @@ import { openWeatherConfig } from "./config";
 const apiClient = new AxiosClient(openWeatherConfig.baseUrl);
 const apiKey = openWeatherConfig.apiKey;
 
-export async function getGeoCoordinates(location: LocationLookup) {
+export async function getGeoCoordinates(location: string) {
   try {
     const params = new URLSearchParams({
-      q: location.city,
+      q: location,
       limit: "5",
       appid: apiKey,
     });
@@ -20,10 +20,16 @@ export async function getGeoCoordinates(location: LocationLookup) {
     const countryData: GeoLookupResponse[] = response.data;
 
     // filter the ones with the actual name
-    const filteredData = countryData.filter(
-      (country) => country.name.toLowerCase() === location.city.toLowerCase(),
-    );
-    
+    const filteredData: OpenWeatherResponseObject[] = countryData
+      .filter(
+        (country) => country.name.toLowerCase() === location.toLowerCase(),
+      )
+      .map((country) => {
+        // Create a new object without local_names to satisfy the OpenWeatherResponseObject type
+        const { local_names, ...rest } = country;
+        return rest;
+      });
+
     return filteredData;
   } catch (error) {
     logger.error("Error fetching location coordinates", error);
