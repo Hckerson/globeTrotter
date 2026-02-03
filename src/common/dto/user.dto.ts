@@ -8,3 +8,10 @@ export interface RegisterUserDto {
   role: Roles;
   password: string;
 }
+
+export interface ReviewPostingDto {
+  userId: string;
+  rating: number;
+  comment: string;
+  destinationId: string;
+}

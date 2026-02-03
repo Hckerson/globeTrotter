@@ -16,6 +16,8 @@ class UserRoutes {
     );
 
     this.router.post("/users", userController.getAllUser.bind(userController));
+
+    this.router.post("/users/review", userController.getAllUser.bind(userController));
   }
 
   getRouter() {

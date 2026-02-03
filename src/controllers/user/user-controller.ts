@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { RequestWithUser } from "../../common/interface/req";
+import { ReviewPostingDto } from "../../common/dto/user.dto";
 import { UserRepository } from "../../repositories/user.repository";
-import { AllUserLookUp } from "../../common/interface/user.interface";
-
 
 class UserController {
   private userRepository: UserRepository;
@@ -10,9 +9,11 @@ class UserController {
     this.userRepository = new UserRepository();
   }
   async getProfile(req: RequestWithUser, res: Response) {
-    console.log(req.user);
+    const userId = req.query['userId'] as string;
+    const user =  await this.userRepository.findUserById(userId);
     return res.status(200).json({
-      name: "hckerson",
+      message: "Profile fetch successful",
+      user,
     });
   }
 
@@ -24,8 +25,15 @@ class UserController {
       search: search as string,
     });
     return res.status(200).json({
+      message: "Users fetched successfully",
       users,
     });
+  }
+
+  async postReview(req: Request, res: Response) {
+    const reviews = req.body as ReviewPostingDto;
+    const { userId, rating, comment, destinationId } = reviews;
+    
   }
 }
 
