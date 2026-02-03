@@ -6,7 +6,7 @@ import { AxiosClient } from "../axios-client";
 import { config } from "../../../common/config";
 import { AmadeusError } from "../../../common/errors/api.error";
 import { getGeoCoordinates } from "../open-weather/open-weather";
-import { AmadeusOAuth2Token } from "../../../common/interface/externals/amadeus";
+import { AmadeusOAuth2Token } from "../../../common/interface/api/amadeus";
 
 export class AmadeusBaseClass {
   private apiKey: string;
@@ -53,8 +53,7 @@ export class AmadeusBaseClass {
 
     try {
       // construct the bulk request payload
-
-      const bulkRequest = geoLocations.slice(0, 1).map((location) => {
+      const bulkRequest = geoLocations.map((location) => {
         return this.axiosClient.get("/shopping/activities", {
           params: {
             latitude: location.lat,
