@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import reviewController from "../controllers/review/review.controller";
 
 class ReviewRoutes {
   private router: Router;
@@ -9,7 +10,8 @@ class ReviewRoutes {
   }
 
   initializeRoutes() {
-    this.router.get("/booking");
+    this.router.post("/review/new", reviewController.createReview.bind(reviewController));
+    this.router.get("/review/all", reviewController.fetchAllReviews.bind(reviewController));
   }
 
   getRouter() {
