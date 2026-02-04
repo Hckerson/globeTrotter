@@ -1,5 +1,4 @@
 import mongoose from "../providers/database/connection";
-import { iteneraryItemSchema } from "./iteneraryItems";
 import { IItenerary } from "../common/interface/models";
 
 const { Schema, model, Types } = mongoose;

@@ -1,7 +1,7 @@
 import mongoose from "../providers/database/connection";
 import { IBooking } from "../common/interface/models";
 
-const { Schema, model, Types } = mongoose;
+const { Schema, model } = mongoose;
 
 const bookingSchema = new Schema<IBooking>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },

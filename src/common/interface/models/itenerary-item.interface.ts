@@ -1,8 +1,10 @@
+import { Types } from "mongoose";
+
 export interface IIteneraryItem {
-  id?: string;
-  iteneraryId?: string;
+  id?: Types.ObjectId;
+  iteneraryId: Types.ObjectId;
   dayNumber: number;
-  experienceId: string;
+  experienceId: Types.ObjectId;
   notes?: string;
   createdAt: Date;
 }

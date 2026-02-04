@@ -1,11 +1,12 @@
 import mongoose from "../providers/database/connection";
+import { IIteneraryItem } from "../common/interface/models";
 
-const { Schema, model, Types } = mongoose;
+const { Schema, model } = mongoose;
 
-const iteneraryItemSchema = new Schema({
-  iteneraryId: { type: Types.ObjectId,ref: "Itenerary" },
+const iteneraryItemSchema = new Schema<IIteneraryItem>({
+  iteneraryId: { type: Schema.Types.ObjectId,ref: "Itenerary" },
   dayNumber: { type: Number, required: true },
-  experienceId: { type: Types.ObjectId, required: true, ref: "Experience" },
+  experienceId: { type: Schema.Types.ObjectId, required: true, ref: "Experience" },
   notes: String,
   createdAt: { type: Date, default: Date.now() },
 });

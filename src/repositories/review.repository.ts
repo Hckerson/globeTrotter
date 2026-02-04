@@ -1,14 +1,15 @@
 import { logger } from "../lib/logger";
 import { Review } from "../models/review";
+import { IReview } from "../common/interface/models";
 
 export class ReviewRepository {
-  private review: typeof Review
+  private review: typeof Review;
 
   constructor() {
-    this.review = Review
+    this.review = Review;
   }
 
-  async createReview(review) {
+  async createReview(review: Partial<IReview>) {
     try {
       const response = await this.review.create(review);
       return response;

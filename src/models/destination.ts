@@ -1,8 +1,9 @@
 import mongoose from "../providers/database/connection";
+import { IDestination } from "../common/interface/models";
 
 const { Schema, model } = mongoose;
 
-const destinationSchema = new Schema({
+const destinationSchema = new Schema<IDestination>({
   name: { type: String },
   location: {
     address: String,
@@ -10,7 +11,7 @@ const destinationSchema = new Schema({
     country: String,
     state: String,
   },
-  type: {
+  type: { 
     type: String,
     enum: ["city", "country", "natural"],
   },
