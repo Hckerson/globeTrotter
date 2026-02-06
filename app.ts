@@ -5,6 +5,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import baseRoutes from "./src/routes/base";
 import { errorMiddleWare } from "./src/common/middleware/global-error-middleware";
+import { authMiddleware } from "./src/common/middleware/auth-middleware";
 
 const app = express();
 
@@ -22,14 +23,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
-const publicRoutes = ["/login", "/signup", "/verify-password", "/verify-email"];
+const publicRoutes = ["/auth"];
 
 app.use("/v1", (req, res, next) => {
+  console.log(req.path);
   if (publicRoutes.some((route) => req.path.startsWith(route))) {
     return next();
   }
-  // apply global middleware
-  next();
+  authMiddleware(req, res, next);
 });
 
 app.use("/v1", errorMiddleWare)

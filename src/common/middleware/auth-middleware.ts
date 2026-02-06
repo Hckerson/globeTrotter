@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { logger } from "../../lib/logger";
 import { config } from "../../common/config";
 import { NextFunction, Request, Response } from "express";
+import { RequestWithUser } from "../interface/req";
 import { UserRepository } from "../../repositories/user.repository";
 import { CodeRepository } from "../../repositories/code.repository";
 
@@ -9,7 +10,7 @@ const users = new UserRepository();
 const codes = new CodeRepository();
 
 const authMiddleware = async (
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
@@ -25,11 +26,11 @@ const authMiddleware = async (
 
     // verify token
     const token = authorization.split("Bearer ")[1];
-    const { verified } = await verifyAuthHeader(token);
+    const { verified, data } = await verifyAuthHeader(token);
     if (!verified) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
+    console.log(data);
     return next();
   } catch (error) {
     logger.error("Error in auth middleware", error);
@@ -65,7 +66,7 @@ async function verifyAuthHeader(token: string) {
 
       // find user
       const user = await users.findUserById(userId);
-      
+
       if (user) {
         return { verified: true, data: user };
       }
