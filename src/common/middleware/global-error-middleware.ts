@@ -5,5 +5,7 @@ const errorMiddleWare = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  
+};
 export { errorMiddleWare };

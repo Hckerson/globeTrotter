@@ -9,8 +9,13 @@ class ReviewController {
     this.reviewService = new ReviewService();
   }
   async createReview(req: Request, res: Response) {
-    const reviews = req.body as Partial<IReview>  
-    
+    const review = req.body as Partial<IReview>  
+    if(!review){
+      return res.status(400).json({
+        message: "Review is required",
+      });
+    }
+    return this.reviewService.createReview(res, review);
   }
 
   async fetchAllReviews(req: Request, res: Response) {

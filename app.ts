@@ -4,6 +4,7 @@ import logger from "morgan";
 import express from "express";
 import cookieParser from "cookie-parser";
 import baseRoutes from "./src/routes/base";
+import { errorMiddleWare } from "./src/common/middleware/global-error-middleware";
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.use("/v1", (req, res, next) => {
   // apply global middleware
   next();
 });
+
+app.use("/v1", errorMiddleWare)
 
 // mount routes
 app.use("/v1", baseRoutes);

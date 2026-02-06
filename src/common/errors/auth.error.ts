@@ -1,7 +1,10 @@
 
 export class AuthError extends Error{
-  constructor(message:string){
+  private statusCode: number;
+
+  constructor(message:string, statusCode: number){
     super(message)
     this.name = 'AuthError'
+    this.statusCode = statusCode
   }
 }
