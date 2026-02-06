@@ -26,7 +26,6 @@ app.use(express.urlencoded({ extended: false }));
 const publicRoutes = ["/auth"];
 
 app.use("/v1", (req, res, next) => {
-  console.log(req.path);
   if (publicRoutes.some((route) => req.path.startsWith(route))) {
     return next();
   }

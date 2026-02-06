@@ -18,4 +18,14 @@ export class ReviewRepository {
       throw error;
     }
   }
+
+  async fetchAllReview(userId: string) {
+    try {
+      const response = await this.review.find({ userId });
+      return response;
+    } catch (error) {
+      logger.error("Error fetching reviews", error);
+      throw error;
+    }
+  }
 }

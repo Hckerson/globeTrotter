@@ -1,7 +1,9 @@
-import { IUser } from "./models";
-import { Document } from "mongoose";
+import { Types } from "mongoose";
 import { Request } from "express";
 
 export interface RequestWithUser extends Request {
-  user?: IUser & Document;
+  user?: {
+    _id: string;
+    role: string;
+  };
 }

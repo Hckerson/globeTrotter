@@ -27,10 +27,11 @@ const authMiddleware = async (
     // verify token
     const token = authorization.split("Bearer ")[1];
     const { verified, data } = await verifyAuthHeader(token);
-    if (!verified) {
+    if (!verified || !data) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    console.log(data);
+    const { _id, role } = data;
+    req.user = { _id as string, role };
     return next();
   } catch (error) {
     logger.error("Error in auth middleware", error);
@@ -40,7 +41,6 @@ const authMiddleware = async (
 
 async function verifyAuthHeader(token: string) {
   if (!token) return { verified: false, data: null };
-
   try {
     const payload = jwt.verify(
       token,
@@ -49,20 +49,6 @@ async function verifyAuthHeader(token: string) {
 
     if (payload) {
       const userId = payload?.userId;
-
-      // check if token is valid
-
-      const code = await codes.fetchCodeById(userId, "refresh-token");
-
-      if (
-        !code ||
-        code.expiresAt < new Date() ||
-        code.code !== token ||
-        code.type !== "refresh-token" ||
-        code.userId !== userId
-      ) {
-        return { verified: false, data: null };
-      }
 
       // find user
       const user = await users.findUserById(userId);
