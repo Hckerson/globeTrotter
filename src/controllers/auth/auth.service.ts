@@ -6,7 +6,7 @@ import { User } from "../../models/user";
 import { logger } from "../../lib/logger";
 import { config } from "../../common/config";
 import { RegisterUserDto } from "../../common/dto/user.dto";
-import { AuthError } from "../../common/errors/auth.error";
+import { AuthError } from "../../common/errors/error";
 import { Nodemailer } from "../../providers/mails/connection";
 import { EmailTemplates } from "../../../views/templates/email";
 import { VerificationCode } from "../../models/verification-code";

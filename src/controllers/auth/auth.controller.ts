@@ -3,7 +3,7 @@ import { logger } from "../../lib/logger";
 import { Request, Response } from "express";
 import { config } from "../../common/config";
 import { AuthService } from "./auth.service";
-import { AuthError } from "../../common/errors/auth.error";
+import { AuthError } from "../../common/errors/error";
 import { RegisterUserDto } from "../../common/dto/user.dto";
 import { verifyAuthHeader } from "../../common/middleware/auth-middleware";
 
@@ -64,12 +64,12 @@ class AuthController {
     }
 
     const token = header.split("Bearer ")[1];
-    const { verified , data} = await verifyAuthHeader(token);
+    const { verified, data } = await verifyAuthHeader(token);
     if (!verified) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    return this.authService.refreshToken(res, data)
+    return this.authService.refreshToken(res, data);
   }
 }
 
