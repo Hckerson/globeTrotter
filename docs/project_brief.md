@@ -233,3 +233,18 @@ Design a modern, engaging, and intuitive travel planning UI that makes exploring
 - Real-time collaboration indicators (like Google Docs cursors).
 - Smooth animations (Framer Motion).
 - Accessibility (WCAG 2.1 AA).
+
+
+{
+  _id: new ObjectId('697563a5dd930c1b62773cd2'),
+  username: 'hckerson',
+  createdAt: 2026-01-25T00:25:53.389Z,
+  firstName: 'Hckerson',
+  lastName: 'Lee',
+  email: 'hckerson@gmail.com',
+  emailVerified: true,
+  role: 'admin',
+  password: '$2b$10$Hy.trN1ic6TOvp0vJyHd4ejqHKfKswxTdsfiIhNyzFUC/JSGKlCYi',
+  reviews: [],
+  __v: 0
+}

@@ -31,7 +31,7 @@ const authMiddleware = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
     const { _id, role } = data;
-    req.user = { _id as string, role };
+    req.user = { _id, role };
     return next();
   } catch (error) {
     logger.error("Error in auth middleware", error);

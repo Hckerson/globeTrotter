@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { logger } from "../lib/logger";
 import { Review } from "../models/review";
 import { IReview } from "../common/interface/models";
@@ -19,7 +20,7 @@ export class ReviewRepository {
     }
   }
 
-  async fetchAllReview(userId: string) {
+  async fetchAllReview(userId: Types.ObjectId) {
     try {
       const response = await this.review.find({ userId });
       return response;

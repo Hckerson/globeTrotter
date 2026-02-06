@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { IReview } from "../../common/interface/models";
 import { ReviewRepository } from "../../repositories/review.repository";
+import { Types } from "mongoose";
 
 export class ReviewService {
   private review: ReviewRepository;
@@ -20,7 +21,7 @@ export class ReviewService {
     }
   }
 
-  async fetchAllReview(res: Response, userId: string) {
+  async fetchAllReview(res: Response, userId: Types.ObjectId) {
     try {
       const reviewData = await this.review.fetchAllReview(userId);
       return res.status(200).json({
