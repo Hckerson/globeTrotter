@@ -20,9 +20,9 @@ export class ReviewRepository {
     }
   }
 
-  async fetchAllReview(userId: Types.ObjectId) {
+  async fetchAllReview(userId: Types.ObjectId | undefined) {
     try {
-      const response = await this.review.find({ userId });
+      const response = await this.review.find({ userId: userId });
       return response;
     } catch (error) {
       logger.error("Error fetching reviews", error);

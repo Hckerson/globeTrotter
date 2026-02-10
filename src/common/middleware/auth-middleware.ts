@@ -61,7 +61,7 @@ async function verifyAuthHeader(token: string) {
     return { verified: false, data: null };
   } catch (error) {
     logger.error("Error verifying auth header", error);
-    return { verified: false, data: null };
+    throw error
   }
 }
 

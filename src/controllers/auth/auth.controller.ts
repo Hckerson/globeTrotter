@@ -3,7 +3,7 @@ import { logger } from "../../lib/logger";
 import { Request, Response } from "express";
 import { config } from "../../common/config";
 import { AuthService } from "./auth.service";
-import { AuthError } from "../../common/errors/error";
+import { AuthError } from "../../common/errors/route-errors";
 import { RegisterUserDto } from "../../common/dto/user.dto";
 import { verifyAuthHeader } from "../../common/middleware/auth-middleware";
 
