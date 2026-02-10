@@ -1,5 +1,6 @@
 import mongoose from "../providers/database/connection";
 import { IItenerary } from "../common/interface/models";
+import { iteneraryItemSchema } from "./iteneraryItems";
 
 const { Schema, model, Types } = mongoose;
 const itenerarySchema = new Schema<IItenerary>({
@@ -11,6 +12,8 @@ const itenerarySchema = new Schema<IItenerary>({
   description: { type: String, required: true },
   sharedWith: [Schema.Types.ObjectId],
   createdAt: { type: Date, default: Date.now() },
+  iteneraryItems: [iteneraryItemSchema]
+    
 });
 
 itenerarySchema.pre("save", function () {});

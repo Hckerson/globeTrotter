@@ -2,6 +2,7 @@ import { Response } from "express";
 import { IReview } from "../../common/interface/models";
 import { ReviewRepository } from "../../repositories/review.repository";
 import { Types } from "mongoose";
+import { logger } from "../../lib/logger";
 
 export class ReviewService {
   private review: ReviewRepository;
@@ -17,6 +18,7 @@ export class ReviewService {
         reviewData,
       });
     } catch (error) {
+      logger.error("Error creating review", error);
       throw error;
     }
   }
@@ -29,7 +31,8 @@ export class ReviewService {
         reviewData,
       });
     } catch (error) {
-      throw error;  
+      logger.error("Error fetching review", error);
+      throw error;
     }
   }
 }

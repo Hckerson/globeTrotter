@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { IIteneraryItem } from "./itenerary-item.interface";
 
 export interface IItenerary {
   id?: string;
@@ -7,4 +8,5 @@ export interface IItenerary {
   description: string;
   sharedWith: Types.ObjectId[];
   createdAt: Date;
+  iteneraryItems?: IIteneraryItem[];
 }

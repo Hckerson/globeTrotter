@@ -1,20 +1,5 @@
-export class AuthError extends Error {
-  statusCode?: number;
-  cause?: Record<string, any>;
 
-  constructor(
-    message: string,
-    statusCode?: number,
-    cause?: Record<string, any>,
-  ) {
-    super(message);
-    this.name = "AuthError";
-    this.statusCode = statusCode;
-    this.cause = cause;
-  }
-}
-
-export class DestinationError extends Error {
+export class RouteError extends Error {
   statusCode?: number;
   cause?: Record<string, any>;
 

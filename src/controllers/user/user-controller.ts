@@ -1,28 +1,22 @@
 import { Request, Response } from "express";
 import { RequestWithUser } from "../../common/interface/req";
 import { UserRepository } from "../../repositories/user.repository";
+import { UserService } from "./user.service";
 
 class UserController {
-  private userRepository: UserRepository;
+  private userService: UserService
   constructor() {
-    this.userRepository = new UserRepository();
+    this.userService = new UserService();
   }
   async getProfile(req: RequestWithUser, res: Response) {
     const userId = req.query["userId"] as string;
-    const user = await this.userRepository.findUserById(userId);
-    return res.status(200).json({
-      message: "Profile fetch successful",
-      user,
-    });
+    const user = await this.userService.getProfile(userId);
+
   }
 
   async getAllUser(req: Request, res: Response) {
     const { limit = "10", page = "1", search = "" } = req.query;
-    const users = await this.userRepository.fetchAllUsers({
-      limit: limit as string,
-      page: page as string,
-      search: search as string,
-    });
+    const users = await this.userService.getAllUser(limit as string, page as string, search as string);
     return res.status(200).json({
       message: "Users fetched successfully",
       users,

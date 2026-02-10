@@ -14,23 +14,13 @@ class DestinationController {
 
     if (!city || !city.trim()) {
       return res.status(400).json({ message: "City is required" });
-    }
-    try {
-      return await this.destinationService.fetchLocationData(res, city);
-    } catch (error) {
-      logger.error("Error fetching location data", error);
-      throw error;
-    }
+    } 
+    return await this.destinationService.fetchLocationData(res, city);
   }
 
   async refreshToken(req: Request, res: Response) {
-    try {
-      return await this.destinationService.refreshToken(res);
-    } catch (error) {
-      logger.error("Error refreshing token", error);
-      throw error;
-    }
+    return await this.destinationService.refreshToken(res);
   }
 }
 
-export default new DestinationController(); 
+export default new DestinationController();

@@ -1,9 +1,14 @@
 import { Response } from "express";
+import { logger } from "../../lib/logger";
+import { IteneraryService } from "./itenerary.service";
+import { IItenerary } from "../../common/interface/models";
 import { RequestWithUser } from "../../common/interface/req";
-import { Itenerary } from "../../models/itenerary";
 
 export class IteneraryController {
-  constructor() {}
+  private iteneraryService: IteneraryService;
+  constructor() {
+    this.iteneraryService = new IteneraryService();
+  }
 
   /**
    *
@@ -11,49 +16,18 @@ export class IteneraryController {
    * @param res
    */
   async CreateItenerary(req: RequestWithUser, res: Response) {
-    const { title, description, sharedWith, iteneraryItems } = req.body;
+    const itenerary = req.body as Partial<IItenerary>;
+    const {iteneraryItems} = itenerary;
+    logger.log("Creating itenerary with object", req.body);
 
-    console.log("Creating itenerary with object", req.body);
-
-    // if (iteneraryItems.length < 1) {
-    //   return res.status(400).json({
-    //     error: "Invalid payload",
-    //     message: "iteneraryitems must contain at least one thing",
-    //   });
-    // }
-
-    try {
-      const userId = req.user?.id.toString();
-      const newItenerary = new Itenerary({
-        userId,
-        title,
-        description,
-        sharedWith,
+    if (!iteneraryItems || iteneraryItems.length < 1) {
+      return res.status(400).json({
+        error: "Invalid payload",
+        message: "iteneraryitems must contain at least one thing",
       });
-
-      await newItenerary.save();
-
-      const iteneraryId = newItenerary._id;
-
-      const bulkInsertOpts = iteneraryItems.map(
-        (item: Record<string, any>) => ({
-          insertOne: {
-            document: {
-              iteneraryId,
-              ...item,
-            },
-          },
-        }),
-      );
-
-      return res.status(200).json({
-        success: true,
-        message: "Itenerary created successfully",
-      });
-    } catch (error) {
-      console.error("Error creating itenerary");
-      throw error;
     }
+
+
   }
 }
 

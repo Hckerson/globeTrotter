@@ -6,11 +6,11 @@ import { User } from "../../models/user";
 import { logger } from "../../lib/logger";
 import { config } from "../../common/config";
 import { RegisterUserDto } from "../../common/dto/user.dto";
-import { AuthError } from "../../common/errors/route-errors";
 import { Nodemailer } from "../../providers/mails/connection";
 import { EmailTemplates } from "../../../views/templates/email";
 import { VerificationCode } from "../../models/verification-code";
 import { UserRepository } from "../../repositories/user.repository";
+import { RouteError } from "../../common/errors/route-errors";
 
 const { jwtSecret = "" } = config.auth;
 
@@ -76,7 +76,7 @@ export class AuthService {
       }
     } catch (error) {
       logger.error("Error registering user");
-      throw new AuthError("Error registering user");
+      throw new RouteError("Error registering user");
     }
   }
 
@@ -120,7 +120,7 @@ export class AuthService {
           return res.status(401).json({ message: "User not verified" });
         } catch (error) {
           logger.error("Error verifying user");
-          throw new AuthError("Error verifying user");
+          throw new RouteError("Error verifying user");
         }
       }
 
@@ -168,7 +168,7 @@ export class AuthService {
       });
     } catch (error) {
       logger.error("Error logging in user");
-      throw new AuthError("Error logging in user");
+      throw new RouteError("Error logging in user");
     }
   }
 
@@ -204,7 +204,7 @@ export class AuthService {
       return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {
       logger.error("Error verifying email", error);
-      throw new AuthError("Error verifying email");
+      throw new RouteError("Error verifying email");
     }
   }
 
@@ -245,7 +245,7 @@ export class AuthService {
       });
     } catch (error) {
       console.error("Error refreshing token", error);
-      throw new AuthError("Error refreshing token");
+      throw new RouteError("Error refreshing token");
     }
   }
 }
