@@ -18,11 +18,11 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = require("crypto");
 const logger_1 = require("../../lib/logger");
 const config_1 = require("../../common/config");
-const route_errors_1 = require("../../common/errors/route-errors");
 const connection_1 = require("../../providers/mails/connection");
 const email_1 = require("../../../views/templates/email");
 const verification_code_1 = require("../../models/verification-code");
 const user_repository_1 = require("../../repositories/user.repository");
+const route_errors_1 = require("../../common/errors/route-errors");
 const { jwtSecret = "" } = config_1.config.auth;
 class AuthService {
     constructor() {
@@ -74,7 +74,7 @@ class AuthService {
             }
             catch (error) {
                 logger_1.logger.error("Error registering user");
-                throw new route_errors_1.AuthError("Error registering user");
+                throw new route_errors_1.RouteError("Error registering user");
             }
         });
     }
@@ -111,7 +111,7 @@ class AuthService {
                     }
                     catch (error) {
                         logger_1.logger.error("Error verifying user");
-                        throw new route_errors_1.AuthError("Error verifying user");
+                        throw new route_errors_1.RouteError("Error verifying user");
                     }
                 }
                 // confirm password
@@ -143,7 +143,7 @@ class AuthService {
             }
             catch (error) {
                 logger_1.logger.error("Error logging in user");
-                throw new route_errors_1.AuthError("Error logging in user");
+                throw new route_errors_1.RouteError("Error logging in user");
             }
         });
     }
@@ -173,7 +173,7 @@ class AuthService {
             }
             catch (error) {
                 logger_1.logger.error("Error verifying email", error);
-                throw new route_errors_1.AuthError("Error verifying email");
+                throw new route_errors_1.RouteError("Error verifying email");
             }
         });
     }
@@ -202,7 +202,7 @@ class AuthService {
             }
             catch (error) {
                 console.error("Error refreshing token", error);
-                throw new route_errors_1.AuthError("Error refreshing token");
+                throw new route_errors_1.RouteError("Error refreshing token");
             }
         });
     }

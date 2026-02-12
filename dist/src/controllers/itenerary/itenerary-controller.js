@@ -26,7 +26,7 @@ class IteneraryController {
             const itenerary = req.body;
             const { iteneraryItems } = itenerary;
             logger_1.logger.log("Creating itenerary with object", req.body);
-            if ((iteneraryItems === null || iteneraryItems === void 0 ? void 0 : iteneraryItems.length) < 1) {
+            if (!iteneraryItems || iteneraryItems.length < 1) {
                 return res.status(400).json({
                     error: "Invalid payload",
                     message: "iteneraryitems must contain at least one thing",
