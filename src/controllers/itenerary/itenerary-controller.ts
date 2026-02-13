@@ -15,9 +15,9 @@ export class IteneraryController {
    * @param req -Request object to extract the new iteneray information
    * @param res
    */
-  async CreateItenerary(req: RequestWithUser, res: Response) {
+  async createItenerary(req: RequestWithUser, res: Response) {
     const itenerary = req.body as Partial<IItenerary>;
-    const {iteneraryItems} = itenerary;
+    const { iteneraryItems } = itenerary;
     logger.log("Creating itenerary with object", req.body);
 
     if (!iteneraryItems || iteneraryItems.length < 1) {
@@ -27,7 +27,7 @@ export class IteneraryController {
       });
     }
 
-
+    return await this.iteneraryService.createItenerary(itenerary);
   }
 }
 

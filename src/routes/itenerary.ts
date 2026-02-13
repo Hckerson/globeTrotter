@@ -12,7 +12,7 @@ export class IteneraryRoute {
   initializeRoutes() {
     this.router.post(
       "/itenerary/create",
-      iteneraryController.CreateItenerary.bind(iteneraryController),
+      iteneraryController.createItenerary.bind(iteneraryController),
     );
   }
 

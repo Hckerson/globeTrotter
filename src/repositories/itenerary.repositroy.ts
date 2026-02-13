@@ -10,7 +10,6 @@ export class IteneraryRepository {
 
   async createItenerary(itenerary: Partial<IItenerary>) {
     try {
-      
       const response = await this.itenerary.create(itenerary);
       return response;
     } catch (error) {

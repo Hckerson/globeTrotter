@@ -51,7 +51,7 @@ class AuthController {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    return this.authService.refreshToken(res, data);
+    return await  this.authService.refreshToken(res, data);
   }
 }
 
