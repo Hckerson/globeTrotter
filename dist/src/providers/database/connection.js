@@ -18,12 +18,9 @@ const { MONGO_USERNAME, MONGO_PASSWORD } = process.env;
 const MONGO_CONNECTION_STRING = `mongodb+srv://${MONGO_USERNAME}:${encodeURIComponent(MONGO_PASSWORD !== null && MONGO_PASSWORD !== void 0 ? MONGO_PASSWORD : "")}@globetrotter.0yyk4lm.mongodb.net/globe?retryWrites=true&w=majority&appName=globeTrotter`;
 function connectMongoose() {
     return __awaiter(this, void 0, void 0, function* () {
-        mongoose_1.default.connection.on("connected", () => logger_1.logger.log("Mongo connected"));
-        mongoose_1.default.connection.on("open", () => logger_1.logger.log("Mongo open"));
-        mongoose_1.default.connection.on("disconnected", () => logger_1.logger.log("Mongo disconnected"));
-        mongoose_1.default.connection.on("reconnected", () => logger_1.logger.log("Mongo reconnected"));
-        mongoose_1.default.connection.on("disconnecting", () => logger_1.logger.log("Mongo disconnecting"));
-        mongoose_1.default.connection.on("close", () => logger_1.logger.log("Mongo close"));
+        mongoose_1.default.connection.on("connected", () => logger_1.logger.log("Mongo connected successfully"));
+        mongoose_1.default.connection.on("disconnected", () => logger_1.logger.log("Mongo disconnected disconnected succesful"));
+        mongoose_1.default.connection.on("reconnected", () => logger_1.logger.log("Mongo reconnected reconnected succesful "));
         yield mongoose_1.default
             .connect(MONGO_CONNECTION_STRING)
             .then(() => logger_1.logger.log("Mongo connection succesfully established"))

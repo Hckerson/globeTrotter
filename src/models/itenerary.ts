@@ -21,6 +21,7 @@ const itenerarySchema = new Schema<IItenerary>({
 
 itenerarySchema.pre("save", function () {});
 
-const Itenerary = model("Itenerary", itenerarySchema);
+const Itenerary = model("Itenerary", itenerarySchema);  
+
 
 export { Itenerary, itenerarySchema };

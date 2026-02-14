@@ -16,7 +16,11 @@ const itenerarySchema = new Schema({
     description: { type: String, required: true },
     sharedWith: [Schema.Types.ObjectId],
     createdAt: { type: Date, default: Date.now() },
-    iteneraryItems: [iteneraryItems_1.iteneraryItemSchema]
+    iteneraryItems: {
+        type: [iteneraryItems_1.iteneraryItemSchema],
+        default: [],
+        ref: "IteneraryItem",
+    },
 });
 exports.itenerarySchema = itenerarySchema;
 itenerarySchema.pre("save", function () { });

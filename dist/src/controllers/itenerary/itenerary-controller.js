@@ -21,7 +21,7 @@ class IteneraryController {
      * @param req -Request object to extract the new iteneray information
      * @param res
      */
-    CreateItenerary(req, res) {
+    createItenerary(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const itenerary = req.body;
             const { iteneraryItems } = itenerary;
@@ -32,6 +32,7 @@ class IteneraryController {
                     message: "iteneraryitems must contain at least one thing",
                 });
             }
+            return yield this.iteneraryService.createItenerary(itenerary);
         });
     }
 }

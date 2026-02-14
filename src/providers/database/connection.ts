@@ -7,12 +7,15 @@ const MONGO_CONNECTION_STRING = `mongodb+srv://${MONGO_USERNAME}:${encodeURIComp
 )}@globetrotter.0yyk4lm.mongodb.net/globe?retryWrites=true&w=majority&appName=globeTrotter`;
 
 async function connectMongoose() {
-  mongoose.connection.on("connected", () => logger.log("Mongo connected"));
-  mongoose.connection.on("open", () => logger.log("Mongo open"));
-  mongoose.connection.on("disconnected", () => logger.log("Mongo disconnected"));
-  mongoose.connection.on("reconnected", () => logger.log("Mongo reconnected"));
-  mongoose.connection.on("disconnecting", () => logger.log("Mongo disconnecting"));
-  mongoose.connection.on("close", () => logger.log("Mongo close"));
+  mongoose.connection.on("connected", () =>
+    logger.log("Mongo connected successfully"),
+  );
+  mongoose.connection.on("disconnected", () =>
+    logger.log("Mongo disconnected disconnected succesful"),
+  );
+  mongoose.connection.on("reconnected", () =>
+    logger.log("Mongo reconnected reconnected succesful "),
+  );
 
   await mongoose
     .connect(MONGO_CONNECTION_STRING)

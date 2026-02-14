@@ -56,7 +56,7 @@ class AuthController {
             if (!verified) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
-            return this.authService.refreshToken(res, data);
+            return yield this.authService.refreshToken(res, data);
         });
     }
 }
