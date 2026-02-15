@@ -1,4 +1,4 @@
-export class UserRepoError extends Error {
+export class RepoError extends Error {
   statusCode?: number;
   cause?: Record<string, any>;
 
