@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { ApiResponse, AxiosConfig } from "../../common/interface/axios";
+import { ApiResponse, AxiosConfig } from "../../common/interface/axios.interface";
 
 export class AxiosClient {
   private baseUrl: string;

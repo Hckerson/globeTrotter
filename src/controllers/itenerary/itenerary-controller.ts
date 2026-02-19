@@ -2,7 +2,7 @@ import { Response } from "express";
 import { logger } from "../../lib/logger";
 import { IteneraryService } from "./itenerary.service";
 import { IItenerary } from "../../common/interface/models";
-import { RequestWithUser } from "../../common/interface/req";
+import { RequestWithUser } from "../../common/interface/req.interface";
 
 export class IteneraryController {
   private iteneraryService: IteneraryService;

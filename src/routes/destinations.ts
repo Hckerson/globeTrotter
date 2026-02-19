@@ -14,7 +14,7 @@ class DestinationRoutes {
       "/destination/search",
       destinationController.fetchLocationData.bind(destinationController),
     );
-    this.router.get("/destination/refresh", destinationController.refreshToken.bind(destinationController));
+
   }
 
   getRouter() {

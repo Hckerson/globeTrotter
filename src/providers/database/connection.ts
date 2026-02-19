@@ -11,10 +11,10 @@ async function connectMongoose() {
     logger.log("Mongo connected successfully"),
   );
   mongoose.connection.on("disconnected", () =>
-    logger.log("Mongo disconnected disconnected succesful"),
+    logger.log("Mongo disconnected  succesfully"),
   );
   mongoose.connection.on("reconnected", () =>
-    logger.log("Mongo reconnected reconnected succesful "),
+    logger.log("Mongo reconnected  succesfully"),
   );
 
   await mongoose

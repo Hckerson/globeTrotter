@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { logger } from "../../lib/logger";
 import { config } from "../../common/config";
 import { NextFunction, Request, Response } from "express";
-import { RequestWithUser } from "../interface/req";
+import { RequestWithUser } from "../interface/req.interface";
 import { UserRepository } from "../../repositories/user.repository";
 import { CodeRepository } from "../../repositories/code.repository";
 
@@ -61,7 +61,7 @@ async function verifyAuthHeader(token: string) {
     return { verified: false, data: null };
   } catch (error) {
     logger.error("Error verifying auth header", error);
-    throw error
+    throw error;
   }
 }
 

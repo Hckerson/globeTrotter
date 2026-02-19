@@ -13,3 +13,13 @@ export interface IDestination {
   avgCost: number;
   createdAt: Date;
 }
+
+export interface DestinationFilter {
+  city?: string;
+  "min-price"?: string;
+  "max-price"?: string;
+  "max-distance"?: string;
+  "min-rating"?: string;
+  "max-rating"?: string;
+  type?: string;
+}
