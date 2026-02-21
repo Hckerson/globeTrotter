@@ -1,9 +1,9 @@
 import qs from "qs";
-import { amadeusConfig } from "./config";
 import axios from "axios";
+import { apiConfig } from "../config";
 import { logger } from "../../../lib/logger";
 import { AxiosClient } from "../axios-client";
-import { config } from "../../../common/config";
+import { appConfig } from "../../../common/config";
 import { AmadeusError } from "../../../common/errors/api.error";
 import { getGeoCoordinates } from "../open-weather/open-weather";
 import {
@@ -18,9 +18,9 @@ export class AmadeusBaseClass {
   private axiosClient: AxiosClient;
 
   constructor() {
-    this.apiKey = config.api.amadeus.apiKey || "";
-    this.apiSecret = config.api.amadeus.apiSecret || "";
-    this.baseUrl = config.api.amadeus.baseUrl || "";
+    this.apiKey = appConfig.api.amadeus.apiKey || "";
+    this.apiSecret = appConfig.api.amadeus.apiSecret || "";
+    this.baseUrl = appConfig.api.amadeus.baseUrl || "";
     this.axiosClient = new AxiosClient(this.baseUrl);
 
     if (!this.apiKey || !this.apiSecret || !this.baseUrl) {
@@ -31,7 +31,7 @@ export class AmadeusBaseClass {
   async requestToken(): Promise<AmadeusOAuth2Token | null> {
     try {
       const response = await this.axiosClient.post<AmadeusOAuth2Token>(
-        amadeusConfig.requestToken,
+        apiConfig.amadeus.requestToken,
         {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -59,13 +59,13 @@ export class AmadeusBaseClass {
     try {
       // construct the bulk request payload
       const bulkRequest = geoLocations.map((location) => {
-        return this.axiosClient.get(amadeusConfig.fetchLocationData, {
+        return this.axiosClient.get(apiConfig.amadeus.fetchLocationData, {
           params: {
             latitude: location.lat,
             longitude: location.lon,
           },
           headers: {
-            Authorization: `Bearer ${config.api.amadeus.accessToken}`,
+            Authorization: `Bearer ${appConfig.api.amadeus.accessToken}`,
           },
         });
       });
@@ -74,17 +74,6 @@ export class AmadeusBaseClass {
       return responses.map((response) => response.data);
     } catch (error) {
       logger.error("Error fetching tours and activities by location", error);
-      // check if error is axios error
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401 || (error as any).cause === 401) {
-          logger.log("Amadeus token expired, refreshing...");
-          const token = await this.requestToken();
-          if (token) {
-            config.api.amadeus.accessToken = token.access_token;
-            return this.fetchLocationData(location);
-          }
-        }
-      }
       throw new AmadeusError(
         "Error fetching tours and activities by location",
         axios.isAxiosError(error) ? error.response?.status : 500,

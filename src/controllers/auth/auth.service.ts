@@ -4,7 +4,7 @@ import { Response } from "express";
 import { randomBytes } from "crypto";
 import { User } from "../../models/user";
 import { logger } from "../../lib/logger";
-import { config } from "../../common/config";
+import { appConfig } from "../../common/config";
 import { RegisterUserDto } from "../../common/dto/user.dto";
 import { Nodemailer } from "../../providers/mails/connection";
 import { EmailTemplates } from "../../../views/templates/email";
@@ -12,7 +12,7 @@ import { VerificationCode } from "../../models/verification-code";
 import { UserRepository } from "../../repositories/user.repository";
 import { RouteError } from "../../common/errors/route-errors";
 
-const { jwtSecret = "" } = config.auth;
+const { jwtSecret = "" } = appConfig.auth;
 
 export class AuthService {
   private user: UserRepository;
@@ -54,7 +54,7 @@ export class AuthService {
         });
 
         const email = user.email;
-        const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}&userId=${user._id}`;
+        const verificationLink = `${appConfig.app.frontendUrl}/verify-email?code=${verificationCode.code}&userId=${user._id}`;
 
         const template = EmailTemplates.verifyEmail({
           verificationLink,
@@ -104,7 +104,7 @@ export class AuthService {
           });
 
           const email = existingUser.email;
-          const verificationLink = `${config.app.frontendUrl}/verify-email?code=${verificationCode.code}&userId=${existingUser._id}`;
+          const verificationLink = `${appConfig.app.frontendUrl}/verify-email?code=${verificationCode.code}&userId=${existingUser._id}`;
 
           const template = EmailTemplates.verifyEmail({
             verificationLink,
@@ -140,7 +140,7 @@ export class AuthService {
           role: existingUser.role,
         },
         jwtSecret,
-        { expiresIn: "1h", issuer: config.app.appName },
+        { expiresIn: "1h", issuer: appConfig.app.appName },
       );
 
       const refreshToken = jwt.sign(
@@ -149,7 +149,7 @@ export class AuthService {
           role: existingUser.role,
         },
         jwtSecret,
-        { expiresIn: "1d", issuer: config.app.appName },
+        { expiresIn: "1d", issuer: appConfig.app.appName },
       );
 
       await this.code.create({
@@ -216,7 +216,7 @@ export class AuthService {
           role: data.role,
         },
         jwtSecret,
-        { expiresIn: "1h", issuer: config.app.appName },
+        { expiresIn: "1h", issuer: appConfig.app.appName },
       );
 
       const refreshToken = jwt.sign(
@@ -225,7 +225,7 @@ export class AuthService {
           role: data.role,
         },
         jwtSecret,
-        { expiresIn: "1d", issuer: config.app.appName },
+        { expiresIn: "1d", issuer: appConfig.app.appName },
       );
 
       await this.code.updateOne(

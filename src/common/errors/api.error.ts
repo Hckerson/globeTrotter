@@ -29,3 +29,19 @@ export class OpenWeatherError extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export class XchangeRateError extends Error {
+  statusCode?: number;
+  cause?: Record<string, any>;
+
+  constructor(
+    message: string,
+    statusCode?: number,
+    cause?: Record<string, any>,
+  ) {
+    super(message);
+    this.cause = cause;
+    this.name = "XchangeRateError";
+    this.statusCode = statusCode;
+  }
+}

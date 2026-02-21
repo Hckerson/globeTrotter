@@ -1,11 +1,11 @@
-
+import { apiConfig } from "../config";
 import { logger } from "../../../lib/logger";
-import {config} from "../../../common/config";
 import { AxiosClient } from "../axios-client";
+import { appConfig } from "../../../common/config";
 import { OpenWeatherError } from "../../../common/errors/api.error";
 
-const apiClient = new AxiosClient(config.api.openWeather.baseUrl);
-const apiKey = config.api.openWeather.apiKey;
+const apiClient = new AxiosClient(appConfig.api.openWeather.baseUrl || "");
+const apiKey = appConfig.api.openWeather.apiKey || "";
 
 export async function getGeoCoordinates(location: string) {
   try {
@@ -14,7 +14,7 @@ export async function getGeoCoordinates(location: string) {
       limit: "5",
       appid: apiKey,
     });
-    const response = await apiClient.get("/geo/1.0/direct", {
+    const response = await apiClient.get(apiConfig.openWeather.coordinates, {
       params,
     });
 

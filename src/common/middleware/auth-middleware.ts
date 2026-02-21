@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { logger } from "../../lib/logger";
-import { config } from "../../common/config";
+import { appConfig } from "../../common/config";
 import { NextFunction, Request, Response } from "express";
 import { RequestWithUser } from "../interface/req.interface";
 import { UserRepository } from "../../repositories/user.repository";
@@ -44,7 +44,7 @@ async function verifyAuthHeader(token: string) {
   try {
     const payload = jwt.verify(
       token,
-      config.auth.jwtSecret || "",
+      appConfig.auth.jwtSecret || "",
     ) as jwt.JwtPayload;
 
     if (payload) {

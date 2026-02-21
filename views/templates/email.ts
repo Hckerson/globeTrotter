@@ -1,6 +1,6 @@
-import { config } from "../../src/common/config";
+import { appConfig } from "../../src/common/config";
 
-const { appName, frontendUrl } = config.app;
+const { appName, frontendUrl } = appConfig.app;
 
 function renderLayout(
   title: string,

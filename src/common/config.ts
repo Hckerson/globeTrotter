@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-export const config = {
+export const appConfig = {
   app: {
     appName: process.env.APP_NAME,
     frontendUrl: process.env.FRONTEND_URL,
@@ -22,8 +22,12 @@ export const config = {
       accessToken: process.env.AMADEUS_ACCESS_TOKEN,
     },
     openWeather: {
-      baseUrl: process.env.OPENWEATHER_BASE_URL || "",
-      apiKey: process.env.OPENWEATHER_API_KEY || "",
+      baseUrl: process.env.OPENWEATHER_BASE_URL,
+      apiKey: process.env.OPENWEATHER_API_KEY,
+    },
+    xchangeRate: {
+      baseUrl: process.env.XCHANGE_RATE_BASE_URL,
+      apiKey: process.env.XCHANGE_RATE_API_KEY,
     },
   },
 };
