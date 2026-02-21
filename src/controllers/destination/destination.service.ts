@@ -2,6 +2,7 @@ import { Response } from "express";
 import { logger } from "../../lib/logger";
 import { AmadeusBaseClass } from "../../providers/api/amadeus/amadeus";
 import { DestinationFilter } from "../../common/interface/models";
+import exchangeCurrency from "../../providers/api/xchange-rate/xchange-rate";
 
 export class DestinationService {
   private amadeusService: AmadeusBaseClass;
@@ -12,9 +13,11 @@ export class DestinationService {
   async fetchLocationData(
     res: Response,
     city: string,
-    filter?: DestinationFilter,
+    filter: DestinationFilter,
   ) {
     try {
+      const currency = await exchangeCurrency();
+
       const locationData = await this.amadeusService.fetchLocationData(city);
       let actualData = locationData?.flatMap((location) => location.data.data);
       if (actualData) {
@@ -28,15 +31,22 @@ export class DestinationService {
             type,
           } = filter;
 
-
           const filteredLocations = actualData.filter((location) => {
-            
-            const meetMaxRatingRequirement = maxRating ? location.rating <= maxRating : true;
-            const meetMinRatingRequirement = minRating ? location.rating >= minRating : true;
-            const meetMaxDistanceRequirement = maxDistance ? location.distance <= maxDistance : true;
-            
+            const priceInUSD =
+              parseInt(location.price.amount) *
+              currency[location.price.currencyCode];
+            // const meetMaxRatingRequirement = maxRating
+            //   ? location.rating <= maxRating
+            //   : true;
+            // const meetMinRatingRequirement = minRating
+            //   ? location.rating >= minRating
+            //   : true;
+            // const meetMaxDistanceRequirement = maxDistance
+            //   ? location.distance <= maxDistance
+            //   : true;
+
             if (minPrice || maxPrice) {
-              const price = location.price.amount;
+              const price = priceInUSD;
               if (minPrice && maxPrice) {
                 return price >= minPrice && price <= maxPrice;
               } else if (minPrice) {

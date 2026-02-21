@@ -16,10 +16,10 @@ export interface IDestination {
 
 export interface DestinationFilter {
   city?: string;
-  "min-price"?: string;
-  "max-price"?: string;
-  "max-distance"?: string;
-  "min-rating"?: string;
-  "max-rating"?: string;
+  "min-price"?: number;
+  "max-price"?: number;
+  "max-distance"?: number;
+  "min-rating"?: number;
+  "max-rating"?: number;
   type?: string;
 }

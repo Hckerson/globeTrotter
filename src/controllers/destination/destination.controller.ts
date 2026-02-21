@@ -11,12 +11,12 @@ class DestinationController {
 
   async fetchLocationData(req: Request, res: Response) {
     const query = req.query as DestinationFilter;
-    const { city } = query;
+    const { city, ...rest } = query;
 
     if (!city || !city.trim()) {
       return res.status(400).json({ message: "City or location is required" });
     }
-    return await this.destinationService.fetchLocationData(res, city);
+    return await this.destinationService.fetchLocationData(res, city, rest);
   }
 
   async refreshToken(req: Request, res: Response) {

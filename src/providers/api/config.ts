@@ -7,6 +7,6 @@ export const apiConfig = {
     coordinates: "/geo/1.0/direct",
   },
   xchangeRate: {
-    
+    latest: "/latest"
   },
 };
