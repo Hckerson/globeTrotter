@@ -1,4 +1,4 @@
-import mongoose from "../providers/database/connection";
+import mongoose from "../providers/database/mongo";
 import { IItenerary } from "../common/interface/models";
 import { iteneraryItemSchema } from "./iteneraryItems";
 
@@ -21,7 +21,6 @@ const itenerarySchema = new Schema<IItenerary>({
 
 itenerarySchema.pre("save", function () {});
 
-const Itenerary = model("Itenerary", itenerarySchema);  
-
+const Itenerary = model("Itenerary", itenerarySchema);
 
 export { Itenerary, itenerarySchema };

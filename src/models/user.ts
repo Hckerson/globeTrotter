@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { reviewSchema } from "./review";
 import { IUser } from "../common/interface/models";
-import mongoose from "../providers/database/connection";
+import mongoose from "../providers/database/mongo";
 
 const { Schema } = mongoose;
 

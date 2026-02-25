@@ -1,4 +1,4 @@
-import mongoose from "../providers/database/connection";
+import mongoose from "../providers/database/mongo";
 import { IVerificationCode } from "../common/interface/models";
 
 const { Schema, model } = mongoose;

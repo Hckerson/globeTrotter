@@ -1,4 +1,4 @@
-import mongoose from "../providers/database/connection";
+import mongoose from "../providers/database/mongo";
 import { IDestination } from "../common/interface/models";
 
 const { Schema, model } = mongoose;
@@ -11,7 +11,7 @@ const destinationSchema = new Schema<IDestination>({
     country: String,
     state: String,
   },
-  type: { 
+  type: {
     type: String,
     enum: ["city", "country", "natural"],
   },
