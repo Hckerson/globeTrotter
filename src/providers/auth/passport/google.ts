@@ -10,7 +10,19 @@ export class GoogleAuth {
   }
 
   async initiateLogin(){
-    
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+  async logout(){
+    try {
+      
+    } catch (error) {
+      
+    }
   }
 }
   

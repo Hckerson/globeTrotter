@@ -1,6 +1,7 @@
-const { Schema, Types } = mongoose;
+import mongoose from "mongoose";
 import { IReview } from "../common/interface/models";
-import mongoose from "../providers/database/mongo";
+
+const { Schema, Types } = mongoose;
 
 const reviewSchema = new Schema<IReview>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },

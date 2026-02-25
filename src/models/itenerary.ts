@@ -1,4 +1,4 @@
-import mongoose from "../providers/database/mongo";
+import mongoose from "mongoose";
 import { IItenerary } from "../common/interface/models";
 import { iteneraryItemSchema } from "./iteneraryItems";
 

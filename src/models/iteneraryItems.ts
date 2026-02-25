@@ -1,4 +1,4 @@
-import mongoose from "../providers/database/mongo";
+import mongoose from "mongoose";
 import { IIteneraryItem } from "../common/interface/models";
 
 const { Schema, model } = mongoose;

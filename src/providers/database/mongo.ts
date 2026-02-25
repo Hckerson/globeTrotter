@@ -24,5 +24,3 @@ async function connectMongoose() {
 }
 
 connectMongoose();
-
-export default mongoose;
