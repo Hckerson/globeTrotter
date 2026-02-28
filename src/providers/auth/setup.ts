@@ -20,6 +20,10 @@ const socialRouter = Router();
 
 socialRouter.get(
   "/google",
+  (req, res, next) => {
+    console.log("google auth");
+    next();
+  },
   passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 

@@ -6,7 +6,6 @@ import iteneraryRoute from "./itenerary";
 import express, { Router } from "express";
 import experiencesRoute from "./experiences";
 import destinationRoute from "./destinations";
-import socialRouter from "../providers/auth/setup";
 
 class BaseRoutes {
   private router: Router;
@@ -20,7 +19,6 @@ class BaseRoutes {
     this.router.use(authRoute);
     this.router.use(userRoute);
     this.router.use(reviewRoute);
-    this.router.use(socialRouter);
     this.router.use(bookingRoute);
     this.router.use(iteneraryRoute);
     this.router.use(destinationRoute);
