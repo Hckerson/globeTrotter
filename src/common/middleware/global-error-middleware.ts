@@ -13,7 +13,11 @@ const errorMiddleWare = (
     return next();
   }
 
-  if (err instanceof AmadeusError || err instanceof OpenWeatherError) {
+  if(res.headersSent){
+    return next(err)
+  }
+  const isApiErrorType = err instanceof AmadeusError || err instanceof OpenWeatherError;
+  if (isApiErrorType) {
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal server error";
     const cause = err.cause || {};

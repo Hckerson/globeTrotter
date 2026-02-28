@@ -32,10 +32,11 @@ app.use("/v1", (req, res, next) => {
   authMiddleware(req, res, next);
 });
 
-app.use("/v1", errorMiddleWare)
 
 // mount routes
 app.use("/v1", baseRoutes);
+
+app.use("/v1", errorMiddleWare)
 
 const port = process.env.PORT || 4000;
 
