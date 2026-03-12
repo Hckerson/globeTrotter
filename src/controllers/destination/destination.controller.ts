@@ -1,4 +1,3 @@
-import { logger } from "../../lib/logger";
 import { Request, Response } from "express";
 import { DestinationService } from "./destination.service";
 import { DestinationFilter } from "../../common/interface/models";

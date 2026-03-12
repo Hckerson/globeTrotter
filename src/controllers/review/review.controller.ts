@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { ReviewService } from "./review.service";
 import { IReview } from "../../common/interface/models";
 import { RequestWithUser } from "../../common/interface/req.interface";
