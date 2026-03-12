@@ -19,7 +19,7 @@ passport.use(
 const socialRouter = Router();
 
 socialRouter.get(
-  "/google",
+  "/google/login",
   passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 
