@@ -27,17 +27,17 @@ class AuthController {
   }
 
   async verifyEmail(req: Request, res: Response) {
-      const { code = "", userId = "" } = req.query;
-      if (!code || !userId)
-        return res
-          .status(400)
-          .json({ message: "Token or userId is missing in request" });
+    const { code = "", userId = "" } = req.query;
+    if (!code || !userId)
+      return res
+        .status(400)
+        .json({ message: "Token or userId is missing in request" });
 
-      return await this.authService.verifyEmail(
-        res,
-        code as string,
-        userId as string,
-      );
+    return await this.authService.verifyEmail(
+      res,
+      code as string,
+      userId as string,
+    );
   }
 
   async refreshToken(req: Request, res: Response) {
@@ -47,12 +47,13 @@ class AuthController {
     }
     const token = header.split("Bearer ")[1];
     const { verified, data } = await verifyAuthHeader(token);
-    if (!verified) {
+    if (!verified || !data) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    return await  this.authService.refreshToken(res, data);
+    return await this.authService.refreshToken(res, data);
   }
 }
 
 export default new AuthController();
+  

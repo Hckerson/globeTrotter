@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Response } from "express";
 import { randomBytes } from "crypto";
-import { User } from "../../models/user";
 import { logger } from "../../lib/logger";
 import { appConfig } from "../../common/config";
 import { RegisterUserDto } from "../../common/dto/user.dto";
@@ -75,7 +74,7 @@ export class AuthService {
           .status(201);
       }
     } catch (error) {
-      logger.error("Error registering user");
+      logger.error("Error registering user", error);
       throw new RouteError("Error registering user");
     }
   }
@@ -119,7 +118,7 @@ export class AuthService {
 
           return res.status(401).json({ message: "User not verified" });
         } catch (error) {
-          logger.error("Error verifying user");
+          logger.error("Error verifying user", error);
           throw new RouteError("Error verifying user");
         }
       }
@@ -167,7 +166,7 @@ export class AuthService {
         },
       });
     } catch (error) {
-      logger.error("Error logging in user");
+      logger.error("Error logging in user", error);
       throw new RouteError("Error logging in user");
     }
   }
@@ -208,7 +207,7 @@ export class AuthService {
     }
   }
 
-  async refreshToken(res: Response, data: any) {
+  async refreshToken(res: Response, data: Record<string, unknown>) {
     try {
       const accessToken = jwt.sign(
         {

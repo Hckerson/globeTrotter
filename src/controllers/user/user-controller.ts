@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { RequestWithUser } from "../../common/interface/req.interface";
 import { UserService } from "./user.service";
 
@@ -16,18 +16,7 @@ class UserController {
     });
   }
 
-  async getAllUser(req: Request, res: Response) {
-    const { limit = "10", page = "1", search = "" } = req.query;
-    const users = await this.userService.getAllUser(
-      limit as string,
-      page as string,
-      search as string,
-    );
-    return res.status(200).json({
-      message: "Users fetched successfully",
-      users,
-    });
-  }
+
 }
 
 export default new UserController();

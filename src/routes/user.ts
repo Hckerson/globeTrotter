@@ -11,10 +11,6 @@ class UserRoutes {
 
   initializeRoutes() {
     this.router.get("/profile", userController.getProfile.bind(userController));
-
-    this.router.post("/all", userController.getAllUser.bind(userController));
-
-    this.router.post("/review", userController.getAllUser.bind(userController));
   }
 
   getRouter() {
