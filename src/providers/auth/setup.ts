@@ -1,19 +1,22 @@
 import passport from "passport";
 import { Router } from "express";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { appConfig } from "../../common/config";
+
 
 passport.use(
   new GoogleStrategy(
     {
-      callbackURL: process.env.GOOGLE_CALLBACK_URL || "",
-      clientID: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientID: appConfig.google.clientId || "",
+      callbackURL: appConfig.google.callbackURL || "", 
+      clientSecret: appConfig.google.clientSecret || " ",
     },
     (accessToken, refreshToken, profile) => {
       console.log(accessToken, refreshToken, profile);
     },
   ),
 );
+
 
 const socialRouter = Router();
 

@@ -14,6 +14,11 @@ export const appConfig = {
     username: process.env.APP_EMAIL,
     password: process.env.APP_PASSWORD,
   },
+  google: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  },
   api: {
     amadeus: {
       apiKey: process.env.AMADEUS_API_KEY,
