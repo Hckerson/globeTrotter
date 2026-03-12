@@ -10,8 +10,14 @@ class ReviewRoutes {
   }
 
   initializeRoutes() {
-    this.router.post("/review/new", reviewController.createReview.bind(reviewController));
-    this.router.get("/review/all", reviewController.fetchAllReviews.bind(reviewController));
+    this.router.post(
+      "/new",
+      reviewController.createReview.bind(reviewController),
+    );
+    this.router.get(
+      "/all",
+      reviewController.fetchAllReviews.bind(reviewController),
+    );
   }
 
   getRouter() {

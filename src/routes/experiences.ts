@@ -9,7 +9,7 @@ class ExperienceRoutes {
   }
 
   initializeRoutes() {
-    this.router.get("/booking");
+    this.router.get("/new");
   }
 
   getRouter() {

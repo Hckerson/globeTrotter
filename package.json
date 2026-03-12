@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^17.2.3",
+    "eslint-config-airbnb-base": "^15.0.0",
     "http-errors": "~1.6.3",
     "inversify": "^7.10.8",
     "jsonwebtoken": "^9.0.3",
@@ -34,6 +35,7 @@
     "resend": "^6.6.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
@@ -43,9 +45,13 @@
     "@types/node": "^24.10.4",
     "@types/nodemailer": "^7.0.4",
     "@types/passport-google-oauth20": "^2.0.17",
+    "eslint": "^10.0.3",
     "express": "~4.16.4",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0"
   }
 }

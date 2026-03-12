@@ -1,6 +1,5 @@
 import passport from "passport";
 import { Router } from "express";
-import { User } from "../../models/user";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 passport.use(
@@ -10,7 +9,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     },
-    (accessToken, refreshToken, profile, done) => {
+    (accessToken, refreshToken, profile) => {
       console.log(accessToken, refreshToken, profile);
     },
   ),

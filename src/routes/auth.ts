@@ -10,20 +10,17 @@ class AuthRoutes {
   }
 
   initializeRoutes() {
-    this.router.post("/auth/login", authController.login.bind(authController));
+    this.router.use("/", socialRouter);
+    this.router.post("/login", authController.login.bind(authController));
+    this.router.post("/signup", authController.register.bind(authController));
     this.router.post(
-      "/auth/signup",
-      authController.register.bind(authController),
-    );
-    this.router.post(
-      "/auth/verify-email",
+      "/verify-email",
       authController.verifyEmail.bind(authController),
     );
     this.router.get(
-      "/auth/refresh-token",
+      "/refresh-token",
       authController.refreshToken.bind(authController),
     );
-    this.router.use("/auth", socialRouter);
   }
 
   getRouter() {

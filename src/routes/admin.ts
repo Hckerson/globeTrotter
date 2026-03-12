@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 
-class BookingRoutes {
+class AdminRoute {
   private router: Router;
 
   constructor() {
@@ -9,7 +9,7 @@ class BookingRoutes {
   }
 
   initializeRoutes() {
-    this.router.get("/new");
+    this.router.get("/users/all", )
   }
 
   getRouter() {
@@ -17,4 +17,4 @@ class BookingRoutes {
   }
 }
 
-export default new BookingRoutes().getRouter();
+export default new AdminRoute().getRouter();

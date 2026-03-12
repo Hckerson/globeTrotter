@@ -1,7 +1,6 @@
 import { Router } from "express";
 import iteneraryController from "../controllers/itenerary/itenerary-controller";
 
-
 export class IteneraryRoute {
   private router: Router;
   constructor() {
@@ -11,7 +10,7 @@ export class IteneraryRoute {
 
   initializeRoutes() {
     this.router.post(
-      "/itenerary/create",
+      "/create",
       iteneraryController.createItenerary.bind(iteneraryController),
     );
   }
