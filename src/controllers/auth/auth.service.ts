@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Response } from "express";
 import { randomBytes } from "crypto";
 import { logger } from "../../lib/logger";
 import { appConfig } from "../../common/config";
@@ -25,20 +24,18 @@ export class AuthService {
     this.mailService = new Nodemailer();
   }
 
-  async register(res: Response, registerDto: RegisterUserDto) {
+  async register(registerDto: RegisterUserDto) {
     const { email = "" } = registerDto;
 
     try {
       // find existing user
       const existingUser = await this.user.findUserByEmail(email);
 
-      if (existingUser)
-        return res
-          .json({
-            message: "User already exists",
-            data: existingUser,
-          })
-          .status(409);
+      if (existingUser) {
+        throw new RouteError("User already exists", 409, {
+          data: existingUser,
+        });
+      }
 
       // create new user
       const user = await this.user.createNewUser(registerDto);
@@ -67,20 +64,16 @@ export class AuthService {
         });
         logger.log("Email sent", emailResponse);
 
-        return res
-          .json({
-            message: "User registered successfully",
-            data: user,
-          })
-          .status(201);
+        return user;
       }
+      throw new RouteError("User registration failed", 500);
     } catch (error) {
       logger.error("Error registering user", error);
       throw new RouteError("Error registering user");
     }
   }
 
-  async login(res: Response, loginDto: Partial<RegisterUserDto>) {
+  async login(loginDto: Partial<RegisterUserDto>) {
     try {
       const { email = "", password = "" } = loginDto;
 
@@ -89,7 +82,7 @@ export class AuthService {
       const existingUser = await this.user.findUserByEmail(email);
 
       if (!existingUser) {
-        return res.json({ message: "User not found" }).status(404);
+        throw new RouteError("User not found", 404);
       }
 
       // check user verification status
@@ -117,10 +110,11 @@ export class AuthService {
           });
           logger.log("Email sent", emailResponse);
 
-          return res.status(401).json({ message: "User not verified" });
+          throw new RouteError("User not verified", 401);
         } catch (error) {
+          if (error instanceof RouteError) throw error;
           logger.error("Error verifying user", error);
-          throw new RouteError("Error verifying user");
+          throw new RouteError("Error verifying user", 500);
         }
       }
 
@@ -131,7 +125,7 @@ export class AuthService {
       );
 
       if (!isPasswordValid) {
-        return res.status(401).json({ message: "Invalid password" });
+        throw new RouteError("Invalid password", 401);
       }
 
       const accessToken = jwt.sign(
@@ -159,20 +153,18 @@ export class AuthService {
         expiresAt: new Date(Date.now() + 86400000),
       });
 
-      return res.status(200).json({
-        message: "Login successful",
-        data: {
-          accessToken,
-          refreshToken,
-        },
-      });
+      return {
+        accessToken,
+        refreshToken,
+        role: existingUser.role,
+      };
     } catch (error) {
       logger.error("Error logging in user", error);
       throw new RouteError("Error logging in user");
     }
   }
 
-  async verifyEmail(res: Response, token: string, userId: string) {
+  async verifyEmail(token: string, userId: string) {
     try {
       // fetch verificationCode
       const codeData = await this.code.findOne({
@@ -181,8 +173,7 @@ export class AuthService {
         type: "email-verification",
       });
 
-      if (!codeData)
-        return res.status(401).json({ message: "Invalid verification code" });
+      if (!codeData) throw new RouteError("Invalid verification code", 401);
 
       const code = codeData.code;
       const expiresAt = codeData.expiresAt;
@@ -190,28 +181,26 @@ export class AuthService {
       // verify code
 
       if (new Date(expiresAt) < new Date()) {
-        return res.status(401).json({ message: "Verification code expired" });
+        throw new RouteError("Verification code expired", 401);
       }
 
       if (code !== token) {
-        return res.status(401).json({ message: "Invalid verification code" });
+        throw new RouteError("Invalid verification code", 401);
       }
 
       // update user status
 
       await this.user.updateUserById(userId, { emailVerified: true });
 
-      return res.status(200).json({ message: "Email verified successfully" });
     } catch (error) {
       logger.error("Error verifying email", error);
       throw new RouteError("Error verifying email");
     }
   }
-
-  async refreshToken(
-    res: Response,
-    data: { id: Types.ObjectId; role: "admin" | "user" | "partner" },
-  ) {
+  async refreshToken(data: {
+    id: Types.ObjectId;
+    role: "admin" | "user" | "partner";
+  }) {
     try {
       const accessToken = jwt.sign(
         {
@@ -239,13 +228,10 @@ export class AuthService {
         },
       );
 
-      return res.status(200).json({
-        message: "Token refreshed successfully",
-        data: {
-          accessToken,
-          refreshToken,
-        },
-      });
+      return {
+        accessToken,
+        refreshToken,
+      };
     } catch (error) {
       console.error("Error refreshing token", error);
       throw new RouteError("Error refreshing token");

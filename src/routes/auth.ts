@@ -10,7 +10,7 @@ class AuthRoutes {
   }
 
   initializeRoutes() {
-    this.router.use("/", socialRouter);
+    this.router.use(socialRouter);
     this.router.post("/login", authController.login.bind(authController));
     this.router.post("/signup", authController.register.bind(authController));
     this.router.post(

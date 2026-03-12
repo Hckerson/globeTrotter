@@ -9,12 +9,11 @@ class AuthController {
     this.authService = new AuthService();
   }
   async login(req: Request, res: Response) {
-    const { username = "", email = "" } = req.body as Partial<RegisterUserDto>;
-
-    if (!username && !email) {
-      return res.status(400).json({ message: "Username or email is required" });
-    }
-    return await this.authService.login(res, req.body);
+    const data = await this.authService.login(req.body);
+    return res.status(200).json({
+      message: "Login successful",
+      data,
+    });
   }
 
   async googleLogin(req: Request, res: Response) {
@@ -23,21 +22,17 @@ class AuthController {
 
   async register(req: Request, res: Response) {
     const registerUserData = req.body as RegisterUserDto;
-    return await this.authService.register(res, registerUserData);
+    const user = await this.authService.register(registerUserData);
+    return res.status(201).json({
+      message: "User registered successfully",
+      data: user,
+    });
   }
 
   async verifyEmail(req: Request, res: Response) {
     const { code = "", userId = "" } = req.query;
-    if (!code || !userId)
-      return res
-        .status(400)
-        .json({ message: "Token or userId is missing in request" });
-
-    return await this.authService.verifyEmail(
-      res,
-      code as string,
-      userId as string,
-    );
+    await this.authService.verifyEmail(code as string, userId as string);
+    return res.status(200).json({ message: "Email verified successfully" });
   }
 
   async refreshToken(req: Request, res: Response) {
@@ -52,7 +47,11 @@ class AuthController {
     }
     const info = { id: data._id, role: data.role };
 
-    return await this.authService.refreshToken(res, info);
+    const refreshData = await this.authService.refreshToken(info);
+    return res.status(200).json({
+      message: "Token refreshed successfully",
+      data: refreshData,
+    });
   }
 }
 
