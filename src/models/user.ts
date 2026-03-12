@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import { reviewSchema } from "./review";
-import { IUser } from "../common/interface/models";
 
 const { Schema } = mongoose;
 
@@ -49,17 +48,15 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre("findOneAndUpdate", async function (next) {
-  const update = this.getUpdate() as any;
+  const update = this.getUpdate() as unknown as { password: string };
 
   if (update && update.password) {
-    update.password = bcrypt.hash(update.password, SALT_HASH);
+    update.password = bcrypt.hashSync(update.password, SALT_HASH);
   }
   next();
 });
 
 const User = mongoose.model("User", userSchema);
 
-const a = new User();
-a.fullName;
 
 export { User, userSchema };

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { RequestWithUser } from "../../common/interface/req.interface";
-import { UserRepository } from "../../repositories/user.repository";
 import { UserService } from "./user.service";
 
 class UserController {
@@ -11,6 +10,10 @@ class UserController {
   async getProfile(req: RequestWithUser, res: Response) {
     const userId = req.query["userId"] as string;
     const user = await this.userService.getProfile(userId);
+    return res.status(200).json({
+      message: "User fetched successfully",
+      user,
+    });
   }
 
   async getAllUser(req: Request, res: Response) {
