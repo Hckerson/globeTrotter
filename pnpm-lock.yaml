@@ -2848,6 +2848,12 @@ snapshots:
       pause: 0.0.1
       utils-merge: 1.0.1
 
+  passport@0.7.0:
+    dependencies:
+      passport-strategy: 1.0.0
+      pause: 0.0.1
+      utils-merge: 1.0.1
+
   path-to-regexp@0.1.7: {}
 
   pause@0.0.1: {}

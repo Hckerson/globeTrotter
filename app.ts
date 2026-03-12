@@ -11,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:4000"],
+    origin: ["http://localhost:3000", "http://localhost:4005"],
     credentials: true,
     optionsSuccessStatus: 200,
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -32,10 +32,11 @@ app.use("/v1", (req, res, next) => {
   authMiddleware(req, res, next);
 });
 
-app.use("/v1", errorMiddleWare)
 
 // mount routes
 app.use("/v1", baseRoutes);
+
+app.use("/v1", errorMiddleWare)
 
 const port = process.env.PORT || 4000;
 

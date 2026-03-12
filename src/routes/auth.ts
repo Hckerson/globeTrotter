@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import authController from "../controllers/auth/auth.controller";
+import socialRouter from "../providers/auth/setup";
 
 class AuthRoutes {
   private router: Router;
@@ -10,10 +11,6 @@ class AuthRoutes {
 
   initializeRoutes() {
     this.router.post("/auth/login", authController.login.bind(authController));
-    this.router.post(
-      "/auth/google/login",
-      authController.login.bind(authController),
-    );
     this.router.post(
       "/auth/signup",
       authController.register.bind(authController),
@@ -26,6 +23,7 @@ class AuthRoutes {
       "/auth/refresh-token",
       authController.refreshToken.bind(authController),
     );
+    this.router.use("/auth", socialRouter);
   }
 
   getRouter() {
