@@ -10,6 +10,7 @@ import { EmailTemplates } from "../../../views/templates/email";
 import { VerificationCode } from "../../models/verification-code";
 import { UserRepository } from "../../repositories/user.repository";
 import { RouteError } from "../../common/errors/route-errors";
+import { Types } from "mongoose";
 
 const { jwtSecret = "" } = appConfig.auth;
 
@@ -207,11 +208,14 @@ export class AuthService {
     }
   }
 
-  async refreshToken(res: Response, data: Record<string, unknown>) {
+  async refreshToken(
+    res: Response,
+    data: { id: Types.ObjectId; role: "admin" | "user" | "partner" },
+  ) {
     try {
       const accessToken = jwt.sign(
         {
-          userId: data._id,
+          userId: data.id,
           role: data.role,
         },
         jwtSecret,
@@ -220,7 +224,7 @@ export class AuthService {
 
       const refreshToken = jwt.sign(
         {
-          userId: data._id,
+          userId: data.id,
           role: data.role,
         },
         jwtSecret,
@@ -228,7 +232,7 @@ export class AuthService {
       );
 
       await this.code.updateOne(
-        { _id: data._id },
+        { userId: data.id },
         {
           code: refreshToken,
           expiresAt: new Date(Date.now() + 86400000),

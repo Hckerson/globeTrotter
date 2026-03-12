@@ -1,13 +1,11 @@
 import jwt from "jsonwebtoken";
 import { logger } from "../../lib/logger";
 import { appConfig } from "../../common/config";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { RequestWithUser } from "../interface/req.interface";
 import { UserRepository } from "../../repositories/user.repository";
-import { CodeRepository } from "../../repositories/code.repository";
 
 const users = new UserRepository();
-const codes = new CodeRepository();
 
 const authMiddleware = async (
   req: RequestWithUser,

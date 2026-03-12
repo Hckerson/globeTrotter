@@ -11,6 +11,7 @@ export class UserRepository {
   }
 
   async fetchAllUsers(userLookup: AllUserLookUp) {
+    console.log(userLookup);
     try {
       const response = await this.users.find();
       return response;
@@ -30,13 +31,13 @@ export class UserRepository {
     }
   }
 
-  async findUserById(id: string){
+  async findUserById(id: string) {
     try {
-      const response = await this.users.findById(id)
-      return response
+      const response = await this.users.findById(id);
+      return response;
     } catch (error) {
-      logger.error("Error fetching user by id", error)
-      throw error
+      logger.error("Error fetching user by id", error);
+      throw error;
     }
   }
 
@@ -50,7 +51,7 @@ export class UserRepository {
     }
   }
 
-  async updateUserById(id: string, data: any) {
+  async updateUserById(id: string, data: Record<string, unknown>) {
     try {
       const response = await this.users.findOneAndUpdate({ _id: id }, data);
       return response;

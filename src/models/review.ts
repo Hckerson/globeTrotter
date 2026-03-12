@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { IReview } from "../common/interface/models";
 
-const { Schema, Types } = mongoose;
+const { Schema } = mongoose;
 
 const reviewSchema = new Schema<IReview>({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },

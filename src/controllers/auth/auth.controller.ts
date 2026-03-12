@@ -50,10 +50,10 @@ class AuthController {
     if (!verified || !data) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+    const info = { id: data._id, role: data.role };
 
-    return await this.authService.refreshToken(res, data);
+    return await this.authService.refreshToken(res, info);
   }
 }
 
 export default new AuthController();
-  

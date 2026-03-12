@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { IItenerary } from "../common/interface/models";
 import { iteneraryItemSchema } from "./iteneraryItems";
 
-const { Schema, model, Types } = mongoose;
+const { Schema, model } = mongoose;
 const itenerarySchema = new Schema<IItenerary>({
   userId: {
     type: Schema.Types.ObjectId,
