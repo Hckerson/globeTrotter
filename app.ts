@@ -41,5 +41,5 @@ const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
-  console.log('live at http://localhost:4000/v1')
+  console.log("live at http://localhost:4000/v1");
 });

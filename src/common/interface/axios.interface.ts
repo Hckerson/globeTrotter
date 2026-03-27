@@ -1,12 +1,11 @@
 export interface AxiosConfig {
   timeout?: number;
   method?: AxiosMethod;
-  params?: Record<string, any>;
-  headers?: Record<string, any>;
+  params?: Record<string, unknown>;
+  headers?: Record<string, unknown>;
 }
 
-
-export interface ApiResponse <T>{
+export interface ApiResponse<T> {
   data: T | null;
   error?: string;
   status?: number;

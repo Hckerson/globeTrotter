@@ -9,7 +9,7 @@ class AdminRoute {
   }
 
   initializeRoutes() {
-    this.router.get("/users/all", )
+    this.router.get("/users/all");
   }
 
   getRouter() {

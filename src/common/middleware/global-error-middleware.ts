@@ -1,4 +1,3 @@
-import { logger } from "../../lib/logger";
 import { ErrorType } from "../types/error.types";
 import { NextFunction, Request, Response } from "express";
 import { AmadeusError, OpenWeatherError } from "../errors/api.error";

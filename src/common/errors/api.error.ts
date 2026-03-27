@@ -1,11 +1,11 @@
 export class AmadeusError extends Error {
   statusCode?: number;
-  cause?: Record<string, any>;
+  cause?: Record<string, unknown>;
 
   constructor(
     message: string,
     statusCode?: number,
-    cause?: Record<string, any>,
+    cause?: Record<string, unknown>,
   ) {
     super(message);
     this.cause = cause;
@@ -16,12 +16,12 @@ export class AmadeusError extends Error {
 
 export class OpenWeatherError extends Error {
   statusCode?: number;
-  cause?: Record<string, any>;
+  cause?: Record<string, unknown>;
 
   constructor(
     message: string,
     statusCode?: number,
-    cause?: Record<string, any>,
+    cause?: Record<string, unknown>,
   ) {
     super(message);
     this.cause = cause;
@@ -32,12 +32,12 @@ export class OpenWeatherError extends Error {
 
 export class XchangeRateError extends Error {
   statusCode?: number;
-  cause?: Record<string, any>;
+  cause?: Record<string, unknown>;
 
   constructor(
     message: string,
     statusCode?: number,
-    cause?: Record<string, any>,
+    cause?: Record<string, unknown>,
   ) {
     super(message);
     this.cause = cause;

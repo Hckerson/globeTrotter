@@ -1,11 +1,11 @@
 export class RepoError extends Error {
   statusCode?: number;
-  cause?: Record<string, any>;
+  cause?: Record<string, unknown>;
 
   constructor(
     message: string,
     statusCode?: number,
-    cause?: Record<string, any>,
+    cause?: Record<string, unknown>,
   ) {
     super(message);
     this.name = "UserRepoError";

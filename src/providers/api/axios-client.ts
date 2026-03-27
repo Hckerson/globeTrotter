@@ -1,5 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { ApiResponse, AxiosConfig } from "../../common/interface/axios.interface";
+import {
+  ApiResponse,
+  AxiosConfig,
+} from "../../common/interface/axios.interface";
 
 export class AxiosClient {
   private baseUrl: string;
@@ -32,7 +35,7 @@ export class AxiosClient {
       data: body,
     };
 
-    const headerBody: Record<string, any> = {};
+    const headerBody: Record<string, unknown> = {};
     try {
       if (body instanceof FormData) {
         headerBody["Content-Type"] = "multipart/form-data";
@@ -59,7 +62,7 @@ export class AxiosClient {
     }
   }
 
-  async get<T = any>(url: string, config: AxiosConfig) {
+  async get<T = unknown>(url: string, config: AxiosConfig) {
     try {
       return await this.request<T>(url, { ...config, method: "GET" });
     } catch (error) {
@@ -67,7 +70,7 @@ export class AxiosClient {
       throw error;
     }
   }
-  async post<T = any>(url: string, config: AxiosConfig, body?: unknown) {
+  async post<T = unknown>(url: string, config: AxiosConfig, body?: unknown) {
     try {
       return await this.request<T>(url, { ...config, method: "POST" }, body);
     } catch (error) {
@@ -75,7 +78,7 @@ export class AxiosClient {
       throw error;
     }
   }
-  async patch<T = any>(url: string, config: AxiosConfig, body?: unknown) {
+  async patch<T = unknown>(url: string, config: AxiosConfig, body?: unknown) {
     try {
       return await this.request<T>(url, { ...config, method: "PATCH" }, body);
     } catch (error) {
@@ -83,7 +86,7 @@ export class AxiosClient {
       throw error;
     }
   }
-  async put<T = any>(url: string, config: AxiosConfig, body?: unknown) {
+  async put<T = unknown>(url: string, config: AxiosConfig, body?: unknown) {
     try {
       return await this.request<T>(url, { ...config, method: "PUT" }, body);
     } catch (error) {
@@ -91,7 +94,7 @@ export class AxiosClient {
       throw error;
     }
   }
-  async delete<T = any>(url: string, config: AxiosConfig, body?: unknown) {
+  async delete<T = unknown>(url: string, config: AxiosConfig, body?: unknown) {
     try {
       return await this.request<T>(url, { ...config, method: "DELETE" }, body);
     } catch (error) {
